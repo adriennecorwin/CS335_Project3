@@ -14,8 +14,11 @@ public class Main {
         morphFrame.getContentPane().setLayout(new FlowLayout());
         MorphGrid morphGridBefore = new MorphGrid(10);
         MorphGrid morphGridAfter = new MorphGrid(10);
+        MorphView morphView = new MorphView();
+        MorphController morphController = new MorphController(morphGridBefore, morphGridAfter, morphView);
         morphFrame.getContentPane().add(morphGridBefore);
         morphFrame.getContentPane().add(morphGridAfter);
+        morphFrame.getContentPane().add(morphView);
         morphFrame.setSize(windowWidth, windowHeight);
         morphFrame.setVisible(true);
         morphFrame.addWindowListener(new WindowAdapter() {
@@ -24,5 +27,6 @@ public class Main {
                 System.exit(0);
             }
         });
+
     }
 }

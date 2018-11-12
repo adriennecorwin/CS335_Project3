@@ -2,16 +2,13 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 
 public class MorphGrid extends JPanel {
     private int gridDim;
     private int panelSize;
     private int spacing;
-    private boolean isDragging = false;
     private int pointDragged[];
+    private ControlPoint correspondingPoint;
     private ControlPoint controlPoints[][];
     private Triangle triangles[][][];
 
@@ -21,6 +18,7 @@ public class MorphGrid extends JPanel {
         panelSize = 600;
         this.gridDim=gridDim+1;
         spacing = panelSize/this.gridDim;
+        pointDragged = new int[2];
         controlPoints = new ControlPoint[this.gridDim][this.gridDim];
         triangles = new Triangle[this.gridDim][this.gridDim][2];
         int x = spacing;
@@ -71,70 +69,17 @@ public class MorphGrid extends JPanel {
             triangles[i][this.gridDim-1][1] = new Triangle(controlPoints[i-1][9], controlPoints[i][9], new Point(borderX+spacing, panelSize));
             borderX+=spacing;
         }
+    }
 
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-//                super.mousePressed(e);
-                for(int i=0; i<gridDim; i++){
-                    for(int j=0; j<gridDim; j++){
-                        if(controlPoints[j][i].getShape().contains(e.getX(), e.getY())){
-                            isDragging = true;
-                            pointDragged = new int[2];
-                            pointDragged[0] = j;
-                            pointDragged[1] = i;
-                            break;
-                        }
-                    }
-                }
-            }
-        });
-
-        this.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-//                super.mouseReleased(e);
-                isDragging=false;
-            }
-        });
-
-        this.addMouseListener(new MouseAdapter() {//if mouse exits JPANEL aka outside of bounds
-            @Override
-            public void mouseExited(MouseEvent e) {
-//                super.mouseExited(e);
-
-            }
-        });
-
-        this.addMouseMotionListener(new MouseMotionListener() {
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if(isDragging){ //and e.getx inside panel and e.gety insdie panel
-                    controlPoints[pointDragged[0]][pointDragged[1]].setXY(e.getX(), e.getY());
-                    for(int i=0; i<gridDim; i++){
-                        for(int j=0; j<gridDim; j++){
-                            for(int k=0; k<=1; k++){
-                                if(triangles[j][i][k].controlledBy(controlPoints[pointDragged[0]][pointDragged[1]])==1){
-                                    triangles[j][i][k].setControlPoint(1, controlPoints[pointDragged[0]][pointDragged[1]]);
-                                }
-                                if(triangles[j][i][k].controlledBy(controlPoints[pointDragged[0]][pointDragged[1]])==2){
-                                    triangles[j][i][k].setControlPoint(2, controlPoints[pointDragged[0]][pointDragged[1]]);
-                                }
-                                if(triangles[j][i][k].controlledBy(controlPoints[pointDragged[0]][pointDragged[1]])==3){
-                                    triangles[j][i][k].setControlPoint(3, controlPoints[pointDragged[0]][pointDragged[1]]);
-                                }
-                            }
-                        }
-                    }
-                    repaint();
-                }
-            }
-
-            @Override
-            public void mouseMoved(MouseEvent e) {
-
-            }
-        });
+    MorphGrid(MorphGrid toCopy){
+        this.setPreferredSize(new Dimension(700, 700));
+        this.gridDim = toCopy.gridDim;
+        this.panelSize = toCopy.panelSize;
+        this.spacing = toCopy.spacing;
+        this.correspondingPoint = toCopy.correspondingPoint;
+        this.controlPoints = toCopy.controlPoints;
+        this.triangles = toCopy.triangles;
+        this.pointDragged = toCopy.pointDragged;
     }
 
     public void paintComponent(Graphics g){
@@ -143,10 +88,11 @@ public class MorphGrid extends JPanel {
                 g.setColor(Color.BLACK);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setColor(Color.BLACK);
-                if(isDragging) {
-                    if (pointDragged[0] == j && pointDragged[1] == i) {
-                        g2.setColor(Color.RED);
-                    }
+                if (pointDragged[0] == j && pointDragged[1] == i) {
+                    g2.setColor(Color.RED);
+                }
+                else if(controlPoints[j][i]==correspondingPoint){
+                    g2.setColor(Color.RED);
                 }
                 g2.fill(controlPoints[j][i].getShape());
             }
@@ -158,5 +104,74 @@ public class MorphGrid extends JPanel {
                 }
             }
         }
+    }
+
+    public void updateTrianlges(int x, int y){
+        controlPoints[pointDragged[0]][pointDragged[1]].setXY(x, y);
+
+        for(int i=0; i<gridDim; i++) {
+            for (int j = 0; j < gridDim; j++) {
+                for (int k = 0; k <= 1; k++) {
+                    if (triangles[j][i][k].controlledBy(controlPoints[pointDragged[0]][pointDragged[1]]) == 1) {
+                        triangles[j][i][k].setControlPoint(1, controlPoints[pointDragged[0]][pointDragged[1]]);
+                    }
+                    if (triangles[j][i][k].controlledBy(controlPoints[pointDragged[0]][pointDragged[1]]) == 2) {
+                        triangles[j][i][k].setControlPoint(2, controlPoints[pointDragged[0]][pointDragged[1]]);
+                    }
+                    if (triangles[j][i][k].controlledBy(controlPoints[pointDragged[0]][pointDragged[1]]) == 3) {
+                        triangles[j][i][k].setControlPoint(3, controlPoints[pointDragged[0]][pointDragged[1]]);
+                    }
+                }
+            }
+        }
+
+        repaint();
+    }
+
+    public void updateTrianglePreview(int x, int y){
+        for(int i=0; i<gridDim; i++) {
+            for (int j = 0; j < gridDim; j++) {
+                for (int k = 0; k <= 1; k++) {
+                    if (triangles[j][i][k].controlledBy(controlPoints[x][y]) == 1) {
+                        triangles[j][i][k].setControlPoint(1, controlPoints[x][y]);
+                    }
+                    if (triangles[j][i][k].controlledBy(controlPoints[x][y]) == 2) {
+                        triangles[j][i][k].setControlPoint(2, controlPoints[x][y]);
+                    }
+                    if (triangles[j][i][k].controlledBy(controlPoints[x][y]) == 3) {
+                        triangles[j][i][k].setControlPoint(3, controlPoints[x][y]);
+                    }
+                }
+            }
+        }
+        repaint();
+    }
+
+    public int[] getPointDragged(){
+        return pointDragged;
+    }
+
+    public void setCorrespondingPoint(int[] correspondingPoint){
+        this.correspondingPoint = controlPoints[correspondingPoint[0]][correspondingPoint[1]];
+    }
+
+    public void setPointDragged(int[] pointDragged){
+        this.pointDragged = pointDragged;
+    }
+
+    public ControlPoint getCorrespondingPoint(){
+        return correspondingPoint;
+    }
+
+    public Triangle[][][] getTriangles(){
+        return triangles;
+    }
+
+    public int getGridDim(){
+        return gridDim;
+    }
+
+    public ControlPoint[][] getControlPoints(){
+        return controlPoints;
     }
 }
