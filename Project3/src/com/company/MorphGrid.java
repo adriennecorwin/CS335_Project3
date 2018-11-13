@@ -7,6 +7,7 @@ public class MorphGrid extends JPanel {
     private int gridDim;
     private int panelSize;
     private int spacing;
+    private boolean isCopy=false;
     private int pointDragged[];
     private ControlPoint correspondingPoint;
     private ControlPoint controlPoints[][];
@@ -77,9 +78,22 @@ public class MorphGrid extends JPanel {
         this.panelSize = toCopy.panelSize;
         this.spacing = toCopy.spacing;
         this.correspondingPoint = toCopy.correspondingPoint;
-        this.controlPoints = toCopy.controlPoints;
-        this.triangles = toCopy.triangles;
+        this.controlPoints = new ControlPoint[this.gridDim-1][this.gridDim-1];
+        for(int i=0; i<this.gridDim-1; i++){
+            for(int j=0; j<this.gridDim-1; j++){
+                this.controlPoints[j][i]= new ControlPoint((int)toCopy.controlPoints[j][i].getX(), (int)toCopy.controlPoints[j][i].getY());
+            }
+        }
+        this.triangles = new Triangle[this.gridDim][this.gridDim][2];
+        for(int i=0; i<this.gridDim; i++){
+            for(int j=0; j<this.gridDim; j++){
+                for(int k=0; k<=1; k++){
+                    this.triangles[j][i][k]=new Triangle(toCopy.triangles[j][i][k].getV1(), toCopy.triangles[j][i][k].getV2(), toCopy.triangles[j][i][k].getV3());
+                }
+            }
+        }
         this.pointDragged = toCopy.pointDragged;
+        isCopy=true;
     }
 
     public void paintComponent(Graphics g){
@@ -88,13 +102,19 @@ public class MorphGrid extends JPanel {
                 g.setColor(Color.BLACK);
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setColor(Color.BLACK);
-                if (pointDragged[0] == j && pointDragged[1] == i) {
+                if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
                     g2.setColor(Color.RED);
+                    g2.fill(controlPoints[j][i].getShape());
+                    g2.setColor(Color.BLACK);
                 }
-                else if(controlPoints[j][i]==correspondingPoint){
+                else if(controlPoints[j][i]==correspondingPoint && !isCopy){
                     g2.setColor(Color.RED);
+                    g2.fill(controlPoints[j][i].getShape());
+                    g2.setColor(Color.BLACK);
                 }
-                g2.fill(controlPoints[j][i].getShape());
+                else {
+                    g2.fill(controlPoints[j][i].getShape());
+                }
             }
         }
         for(int i=0; i<this.gridDim; i++){

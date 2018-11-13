@@ -11,7 +11,7 @@ public class ControlPoint extends Point{
         this.x = x;
         this.y = y;
         shape = new Ellipse2D.Float();
-        shape.setFrame(this.x, this.y, radius, radius);
+        shape.setFrame(x-radius/2, y-radius/2, radius, radius);
     }
 
     public Ellipse2D getShape(){
@@ -21,6 +21,6 @@ public class ControlPoint extends Point{
     public void setXY(int newX, int newY){
         x = newX;
         y = newY;
-        shape.setFrame(x, y, radius, radius);
+        shape.setFrame(x-radius/2, y-radius/2, radius, radius);
     }
 }
