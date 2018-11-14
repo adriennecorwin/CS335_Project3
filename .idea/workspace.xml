@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="756e0d91-af95-49e0-9353-0c94eaf95649" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/CS335_Project3.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS335_Project3.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project3/src/com/company/ControlPoint.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project3/src/com/company/ControlPoint.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project3/src/com/company/MorphController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project3/src/com/company/MorphController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Project3/src/com/company/MorphGrid.java" beforeDir="false" afterPath="$PROJECT_DIR$/Project3/src/com/company/MorphGrid.java" afterDir="false" />
-    </list>
+    <list default="true" id="756e0d91-af95-49e0-9353-0c94eaf95649" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,20 +30,24 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="java" value="11" />
+          <entry key="txt" value="15" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JAVA" value="11" />
+          <entry key="PLAIN_TEXT" value="15" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Project3/src/com/company/Main.java">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1" />
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -71,10 +68,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Project3/src/com/company/MorphController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="666">
+            <state relative-caret-position="1785">
               <caret line="136" column="38" selection-start-line="136" selection-start-column="38" selection-end-line="136" selection-end-column="38" />
             </state>
           </provider>
@@ -95,9 +92,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="239" />
-    <option name="y" value="23" />
-    <option name="width" value="1099" />
+    <option name="y" value="159" />
+    <option name="width" value="1440" />
     <option name="height" value="877" />
   </component>
   <component name="ProjectView">
@@ -117,6 +113,19 @@
               <item name="CS335_Project3" type="b2602c69:ProjectViewProjectNode" />
               <item name="CS335_Project3" type="462c0819:PsiDirectoryNode" />
               <item name="Project3" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CS335_Project3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CS335_Project3" type="462c0819:PsiDirectoryNode" />
+              <item name="Project3" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="CS335_Project3" type="b2602c69:ProjectViewProjectNode" />
+              <item name="CS335_Project3" type="462c0819:PsiDirectoryNode" />
+              <item name="Project3" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="company" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -167,20 +176,28 @@
       <option name="presentableId" value="Default" />
       <updated>1541917184126</updated>
     </task>
+    <task id="LOCAL-00001" summary="This might work">
+      <created>1542140469020</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1542140469020</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="239" y="23" width="1099" height="877" extended-state="0" />
+    <frame x="0" y="159" width="1440" height="877" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26395458" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19957082" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Capture Tool" order="5" />
       <window_info id="Favorites" order="6" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.3299363" />
+      <window_info anchor="bottom" id="Messages" visible="true" weight="0.3299363" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.3299363" />
@@ -231,11 +248,20 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="This might work" />
+    <option name="LAST_COMMIT_MESSAGE" value="This might work" />
+  </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Project3/src/com/company/MorphController.java">
+    <entry file="file://$PROJECT_DIR$/Project3/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="136" column="38" selection-start-line="136" selection-start-column="38" selection-end-line="136" selection-end-column="38" />
+        <state relative-caret-position="-1" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Project3/src/com/company/MorphGrid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="9" column="33" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -246,15 +272,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Project3/src/com/company/MorphGrid.java">
+    <entry file="file://$PROJECT_DIR$/Project3/src/com/company/MorphController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="9" column="33" selection-start-line="9" selection-start-column="33" selection-end-line="9" selection-end-column="33" />
+        <state relative-caret-position="1785">
+          <caret line="136" column="38" selection-start-line="136" selection-start-column="38" selection-end-line="136" selection-end-column="38" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Project3/src/com/company/Main.java">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
   <component name="masterDetails">
