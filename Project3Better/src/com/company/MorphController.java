@@ -30,6 +30,8 @@ public class MorphController{
                     correspondingMorphGrid.setCorrespondingPoint(pointDragged);
                     currentMorphGrid.repaint();
                     correspondingMorphGrid.repaint();
+                    //currentMorphGrid.revalidate();
+                    //correspondingMorphGrid.revalidate();
                     break;
                 }
             }

@@ -109,11 +109,15 @@ public class MorphGrid extends JPanel {
     }
 
     public void paintComponent(Graphics g){
+        super.paintComponent(g);
+        g.setColor(Color.BLACK);
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setColor(Color.BLACK);
         for(int i=0; i<this.gridDim-1; i++){
             for(int j=0; j<this.gridDim-1; j++){
-                g.setColor(Color.BLACK);
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setColor(Color.BLACK);
+               // g.setColor(Color.BLACK);
+                //Graphics2D g2 = (Graphics2D) g;
+                //g2.setColor(Color.BLACK);
                 if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
                     g2.setColor(Color.RED);
                     g2.fill(controlPoints[j][i].getShape());
@@ -133,7 +137,7 @@ public class MorphGrid extends JPanel {
         for(int i=0; i<this.gridDim; i++){
             for(int j=0; j<this.gridDim; j++){
                 for(int k=0; k<=1; k++) {
-                    g.drawPolygon(triangles[j][i][k].getXPoints(), triangles[j][i][k].getYPoints(), 3);
+                    g2.drawPolygon(triangles[j][i][k].getXPoints(), triangles[j][i][k].getYPoints(), 3);
                 }
             }
         }
@@ -196,5 +200,7 @@ public class MorphGrid extends JPanel {
     public ControlPoint[][] getControlPoints(){
         return controlPoints;
     }
+
+
 
 }
