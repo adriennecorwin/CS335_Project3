@@ -2,34 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="75e3fd7a-3ebd-4233-b934-86cfef1cd80c" name="Default Changelist" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../Project3/.idea/description.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../Project3/.idea/modules.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../Project3/.idea/project-template.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../Project3/.idea/vcs.xml" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/../Project3/Project3.iml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/ControlPoint.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/ControlPoint.class" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/FrameBuilder.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/company/MyImageObj.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/Main$1.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/Main$1.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/Main.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/Main.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$1.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$2.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$2.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$3.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$3.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$4.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$4.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$5.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$5.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$6.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$6.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$7.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$7.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$8$1.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$8$1.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$8.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController$8.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphController.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphGrid.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphGrid.class" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphView.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/MorphView.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/Project3AC/com/company/Triangle.class" afterPath="$PROJECT_DIR$/out/production/Project3AC/com/company/Triangle.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Project3/.idea/workspace.xml" afterPath="$PROJECT_DIR$/../Project3/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/Main.java" afterPath="$PROJECT_DIR$/src/com/company/Main.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/MorphController.java" afterPath="$PROJECT_DIR$/src/com/company/MorphController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/MorphGrid.java" afterPath="$PROJECT_DIR$/src/com/company/MorphGrid.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/company/MorphView.java" afterPath="$PROJECT_DIR$/src/com/company/MorphView.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -82,26 +61,52 @@
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="7">
-              <caret line="9" column="49" lean-forward="false" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+            <state relative-caret-position="104">
+              <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1022#1176#0" expanded="true" />
+                <element signature="e#1175#1176#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MorphView.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/company/MorphView.java">
+      <file leaf-file-name="FrameBuilder.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/company/FrameBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-425">
-              <caret line="50" column="42" lean-forward="false" selection-start-line="50" selection-start-column="42" selection-end-line="50" selection-end-column="42" />
+            <state relative-caret-position="270">
+              <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#748#749#0" expanded="true" />
-                <element signature="e#789#790#0" expanded="true" />
-                <element signature="e#1929#1930#0" expanded="true" />
-                <element signature="e#1991#1992#0" expanded="true" />
+                <element signature="e#934#935#0" expanded="true" />
+                <element signature="e#967#968#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MorphView.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/company/MorphView.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-875">
+              <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#1997#1998#0" expanded="true" />
+                <element signature="e#2059#2060#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MyImageObj.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/company/MyImageObj.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="169">
+              <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -110,15 +115,13 @@
       <file leaf-file-name="MorphController.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/company/MorphController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-29">
+            <state relative-caret-position="324">
               <caret line="20" column="102" lean-forward="false" selection-start-line="20" selection-start-column="102" selection-end-line="20" selection-end-column="102" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
                 <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
                 <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
-                <element signature="e#3672#3826#0" expanded="true" />
-                <element signature="e#3825#3826#0" expanded="true" />
                 <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
                 <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
                 <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
@@ -131,8 +134,8 @@
       <file leaf-file-name="MorphGrid.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/company/MorphGrid.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="61">
-              <caret line="111" column="32" lean-forward="true" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
+            <state relative-caret-position="450">
+              <caret line="111" column="32" lean-forward="false" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#setUpControlPoints#0;class#MorphGrid#0" expanded="false" />
@@ -203,20 +206,22 @@
         <option value="$PROJECT_DIR$/src/com/company/Triangle.java" />
         <option value="$PROJECT_DIR$/src/com/company/ControlPoint.java" />
         <option value="$PROJECT_DIR$/src/com/company/MorphController.java" />
-        <option value="$PROJECT_DIR$/src/com/company/Main.java" />
         <option value="$PROJECT_DIR$/src/com/company/MorphGrid.java" />
+        <option value="$PROJECT_DIR$/src/com/company/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/company/FrameBuilder.java" />
+        <option value="$PROJECT_DIR$/src/com/company/MyImageObj.java" />
         <option value="$PROJECT_DIR$/src/com/company/MorphView.java" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="y" value="24" />
     <option name="width" value="1280" />
     <option name="height" value="672" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -229,7 +234,34 @@
       <manualOrder />
       <foldersAlwaysOnTop value="true" />
     </navigator>
-    <panes />
+    <panes>
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="Project3Better" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project3Better" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project3Better" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project3Better" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Project3Better" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Project3Better" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="company" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
+    </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1542166912163" />
@@ -237,7 +269,7 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
-    <property name="last_opened_file_path" value="$USER_HOME$/IdeaProjects/CS335_Exercise4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -291,7 +323,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="20" y="64" width="1282" height="673" extended-state="6" />
+    <frame x="-1" y="24" width="1282" height="673" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -302,12 +334,12 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32780847" sideWeight="0.51620746" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32780847" sideWeight="0.48379254" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32780847" sideWeight="0.48379254" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24959481" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -350,7 +382,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="7" />
+      <option name="time" value="9" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -406,10 +438,89 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="9" column="49" lean-forward="false" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1022#1176#0" expanded="true" />
+            <element signature="e#1175#1176#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MorphController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="20" column="102" lean-forward="false" selection-start-line="20" selection-start-column="102" selection-end-line="20" selection-end-column="102" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
+            <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
+            <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
+            <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
+            <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
+            <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
+            <element signature="method#MorphController#0;class#MorphController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MorphGrid.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="111" column="32" lean-forward="true" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#setUpControlPoints#0;class#MorphGrid#0" expanded="false" />
+            <element signature="method#setUpTriangles#0;class#MorphGrid#0" expanded="false" />
+            <element signature="method#MorphGrid#0;class#MorphGrid#0" expanded="false" />
+            <element signature="method#MorphGrid#1;class#MorphGrid#0" expanded="false" />
+            <element signature="method#updateTrianglePreview#0;class#MorphGrid#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/ControlPoint.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="33" column="61" lean-forward="false" selection-start-line="33" selection-start-column="61" selection-end-line="33" selection-end-column="61" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/Triangle.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="20" lean-forward="false" selection-start-line="0" selection-start-column="20" selection-end-line="0" selection-end-column="20" />
+          <folding>
+            <element signature="e#1193#1194#0" expanded="true" />
+            <element signature="e#1218#1219#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MorphView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="738">
+          <caret line="50" column="42" lean-forward="false" selection-start-line="50" selection-start-column="42" selection-end-line="50" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2059#2060#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="72">
           <caret line="7" column="19" lean-forward="false" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1022#1176#0" expanded="true" />
+            <element signature="e#1175#1176#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -420,10 +531,8 @@
           <caret line="10" column="5" lean-forward="false" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#789#790#0" expanded="true" />
-            <element signature="e#1929#1930#0" expanded="true" />
-            <element signature="e#1991#1992#0" expanded="true" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2059#2060#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -437,8 +546,6 @@
             <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
             <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
             <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
-            <element signature="e#3672#3826#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
             <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
             <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
             <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
@@ -489,6 +596,8 @@
           <caret line="7" column="19" lean-forward="false" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1022#1176#0" expanded="true" />
+            <element signature="e#1175#1176#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -499,10 +608,8 @@
           <caret line="10" column="5" lean-forward="false" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#789#790#0" expanded="true" />
-            <element signature="e#1929#1930#0" expanded="true" />
-            <element signature="e#1991#1992#0" expanded="true" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2059#2060#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -552,8 +659,6 @@
             <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
             <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
             <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
-            <element signature="e#3672#3826#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
             <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
             <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
             <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
@@ -568,6 +673,8 @@
           <caret line="7" column="19" lean-forward="false" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1022#1176#0" expanded="true" />
+            <element signature="e#1175#1176#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -578,10 +685,8 @@
           <caret line="10" column="5" lean-forward="false" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#789#790#0" expanded="true" />
-            <element signature="e#1929#1930#0" expanded="true" />
-            <element signature="e#1991#1992#0" expanded="true" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2059#2060#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -595,8 +700,6 @@
             <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
             <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
             <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
-            <element signature="e#3672#3826#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
             <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
             <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
             <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
@@ -647,6 +750,8 @@
           <caret line="7" column="19" lean-forward="false" selection-start-line="7" selection-start-column="19" selection-end-line="7" selection-end-column="19" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#1022#1176#0" expanded="true" />
+            <element signature="e#1175#1176#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -657,10 +762,8 @@
           <caret line="10" column="5" lean-forward="true" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#789#790#0" expanded="true" />
-            <element signature="e#1929#1930#0" expanded="true" />
-            <element signature="e#1991#1992#0" expanded="true" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2059#2060#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -674,8 +777,6 @@
             <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
             <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
             <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
-            <element signature="e#3672#3826#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
             <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
             <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
             <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
@@ -752,15 +853,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/MorphController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-29">
+        <state relative-caret-position="324">
           <caret line="20" column="102" lean-forward="false" selection-start-line="20" selection-start-column="102" selection-end-line="20" selection-end-column="102" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#setUpDrag#0;class#MorphController#0" expanded="false" />
             <element signature="method#rubberBandingWithBoundaries#0;class#MorphController#0" expanded="false" />
             <element signature="method#addActionListeners#0;class#MorphController#0" expanded="false" />
-            <element signature="e#3672#3826#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
             <element signature="method#makePreviewFrame#0;class#MorphController#0" expanded="false" />
             <element signature="method#calcSteps#0;class#MorphController#0" expanded="false" />
             <element signature="method#animatePreview#0;class#MorphController#0" expanded="false" />
@@ -769,20 +868,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7">
-          <caret line="9" column="49" lean-forward="false" selection-start-line="9" selection-start-column="49" selection-end-line="9" selection-end-column="49" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/MorphGrid.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="61">
-          <caret line="111" column="32" lean-forward="true" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
+        <state relative-caret-position="450">
+          <caret line="111" column="32" lean-forward="false" selection-start-line="111" selection-start-column="32" selection-end-line="111" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#setUpControlPoints#0;class#MorphGrid#0" expanded="false" />
@@ -794,16 +883,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/MorphView.java">
+    <entry file="file://$PROJECT_DIR$/src/com/company/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-425">
-          <caret line="50" column="42" lean-forward="false" selection-start-line="50" selection-start-column="42" selection-end-line="50" selection-end-column="42" />
+        <state relative-caret-position="104">
+          <caret line="23" column="0" lean-forward="false" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#748#749#0" expanded="true" />
-            <element signature="e#789#790#0" expanded="true" />
-            <element signature="e#1929#1930#0" expanded="true" />
-            <element signature="e#1991#1992#0" expanded="true" />
+            <element signature="e#1022#1176#0" expanded="true" />
+            <element signature="e#1175#1176#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MorphView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-875">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1997#1998#0" expanded="true" />
+            <element signature="e#2059#2060#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/FrameBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="15" column="0" lean-forward="false" selection-start-line="15" selection-start-column="0" selection-end-line="15" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#934#935#0" expanded="true" />
+            <element signature="e#967#968#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/MyImageObj.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="169">
+          <caret line="47" column="0" lean-forward="false" selection-start-line="47" selection-start-column="0" selection-end-line="47" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

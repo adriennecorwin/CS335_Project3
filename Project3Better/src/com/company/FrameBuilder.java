@@ -2,15 +2,14 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-public class Main {
+public class FrameBuilder extends JFrame{
     private final static int windowWidth = 1500;
     private final static int windowHeight = 1000;
+    public JFrame morphFrame;
 
-    public static void main(String[] args) {
-        /*JFrame morphFrame = new JFrame("Morph");
+    public FrameBuilder() {
+        morphFrame = new JFrame("Morph");
         morphFrame.getContentPane().setLayout(new FlowLayout());
         MorphGrid morphGridBefore = new MorphGrid(10);
         MorphGrid morphGridAfter = new MorphGrid(10);
@@ -20,13 +19,10 @@ public class Main {
         morphFrame.getContentPane().add(morphGridAfter);
         morphFrame.getContentPane().add(morphView);
         morphFrame.setSize(windowWidth, windowHeight);
-        morphFrame.setVisible(true);*/
-        FrameBuilder frame = new FrameBuilder();
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                System.exit(0);
-            }
-        });
+        morphFrame.setVisible(true);
+    }
+
+    public JFrame getMorphFrame() {
+        return morphFrame;
     }
 }

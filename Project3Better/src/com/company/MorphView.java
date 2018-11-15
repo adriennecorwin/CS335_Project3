@@ -16,12 +16,14 @@ public class MorphView extends JPanel{
     private BufferedImage bim=null;
     private BufferedImage filteredbim=null;
     private boolean showfiltered=false;
+    private MyImageObj view;
 
     public MorphView(){
         previewMorphButton = new JButton("Preview Morph");
         //file = new JMenu("File");
         //this.add(file);
         buildMenus();
+        this.view = new MyImageObj(readImage("boat.gif"));
         this.add(previewMorphButton);
     }
 
@@ -48,8 +50,8 @@ public class MorphView extends JPanel{
                                 image = ImageIO.read(file);
                             } catch (IOException e1){}
 
-                            MorphView.this.setImage(image);
-                            MorphView.this.showImage();
+                            view.setImage(image);
+                            view.showImage();
                         }
                     }
                 }
@@ -67,19 +69,19 @@ public class MorphView extends JPanel{
         bar.add(fileMenu);
     }
 
-    public void setImage(BufferedImage img) {
-        if (img == null) return;
-        bim = img;
-        filteredbim = new BufferedImage
-                (bim.getWidth(), bim.getHeight(), BufferedImage.TYPE_INT_RGB);
-        setPreferredSize(new Dimension(bim.getWidth(), bim.getHeight()));
-        showfiltered=false;
-        MorphView.this.repaint();
+    public BufferedImage readImage (String file) {
+
+        Image image = Toolkit.getDefaultToolkit().getImage(file);
+        MediaTracker tracker = new MediaTracker (new Component () {});
+        tracker.addImage(image, 0);
+        try { tracker.waitForID (0); }
+        catch (InterruptedException e) {}
+        BufferedImage bim = new BufferedImage
+                (image.getWidth(this), image.getHeight(this),
+                        BufferedImage.TYPE_INT_RGB);
+        Graphics2D big = bim.createGraphics();
+        big.drawImage (image, 0, 0, this);
+        return bim;
     }
 
-    public void showImage() {
-        if (bim == null) return;
-        showfiltered=false;
-        MorphView.this.repaint();
-    }
 }
