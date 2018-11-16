@@ -1,28 +1,33 @@
 package com.company;
 
 public class Triangle {
-    private ControlPoint v1;
-    private ControlPoint v2;
-    private ControlPoint v3;
+    private ControlPoint v1; //vertex 1
+    private ControlPoint v2; //vertex 2
+    private ControlPoint v3; //vertex 3
 
 
+    //CONSTRUCTOR
+    //initialize with 3 vertices
     public Triangle(ControlPoint v1, ControlPoint v2, ControlPoint v3) {
         this.v1 = v1;
         this.v2 = v2;
         this.v3 = v3;
     }
 
+    //return all x pos of each vertex
     public int[] getXPoints() {
         int xPoints[] = {(int) v1.getX(), (int) v2.getX(), (int) v3.getX()};
         return xPoints;
     }
 
+    //return all y pos of each vertex
     public int[] getYPoints() {
         int yPoints[] = {(int) v1.getY(), (int) v2.getY(), (int) v3.getY()};
         return yPoints;
     }
 
 
+    //return which vertex of triangle is controlled by control point and pos row, col in control point array
     public int controlledBy(int row, int col) {
 
         if (v1.getRow()==row && v1.getCol()==col) {
@@ -36,6 +41,7 @@ public class Triangle {
         }
     }
 
+    //sets the vth vertex of triangle to be the specified control point
     public void setControlPoint(int v, ControlPoint controlPoint) {
         if (v == 1) {
             v1 = controlPoint;

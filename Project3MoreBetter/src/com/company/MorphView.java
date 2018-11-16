@@ -17,25 +17,25 @@ public class MorphView extends JPanel{
     private JSlider morphTimeSlider;
     private JSlider morphFrameSlider;
 
-    JMenu file;
-    private BufferedImage image;
-    private BufferedImage bim=null;
-    private BufferedImage filteredbim=null;
-    private boolean showfiltered=false;
+//    JMenu file;
+//    private BufferedImage image;
+//    private BufferedImage bim=null;
+//    private BufferedImage filteredbim=null;
+//    private boolean showfiltered=false;
     private MyImageObj view;
 
     public MorphView(){
         previewMorphButton = new JButton("Preview Morph");
         //file = new JMenu("File");
         //this.add(file);
-        buildMenus();
-        this.view = new MyImageObj(readImage("snoop.jpg"));
-        previewMorphButton = new JButton("Preview Morph");
-        resetButton = new JButton("Reset");
-        morphTimeSlider = new JSlider(1,5,2);
-        morphFrameSlider = new JSlider(5, 60, 10);
+//        buildMenus();
+//        this.view = new MyImageObj(readImage("snoop.jpg"));
+        previewMorphButton = new JButton("Preview Morph"); //opens preview window
+        resetButton = new JButton("Reset"); //puts control points back to original positions
+        morphTimeSlider = new JSlider(1,5,2); //controls duration of morph
+        morphFrameSlider = new JSlider(5, 60, 10); //controls number of tween frames
         morphTimeLabel = new JLabel("Morph Duration: "+morphTimeSlider.getValue()+" seconds");
-        morphFrameLabel = new JLabel("Frames Per Second: "+morphFrameSlider.getValue());
+        morphFrameLabel = new JLabel("Number of Tween Frames: "+morphFrameSlider.getValue());
 
         this.add(resetButton);
         this.add(previewMorphButton);
@@ -45,6 +45,8 @@ public class MorphView extends JPanel{
         this.add(morphFrameSlider);
         this.add(previewMorphButton);
     }
+
+    //GETTERS
 
     public JButton getPreviewMorphButton(){
         return previewMorphButton;
@@ -70,57 +72,57 @@ public class MorphView extends JPanel{
         return morphTimeLabel;
     }
 
-    private void buildMenus () {
-
-        final JFileChooser fc = new JFileChooser(".");
-        JMenuBar bar = new JMenuBar();
-        this.add (bar);
-        JMenu fileMenu = new JMenu ("File");
-        JMenuItem fileopen = new JMenuItem ("Open");
-        JMenuItem fileexit = new JMenuItem ("Exit");
-
-        fileopen.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed (ActionEvent e) {
-                        int returnVal = fc.showOpenDialog(MorphView.this);
-                        if (returnVal == JFileChooser.APPROVE_OPTION) {
-                            File file = fc.getSelectedFile();
-                            try {
-                                image = ImageIO.read(file);
-                            } catch (IOException e1){}
-
-                            view.setImage(image);
-                            view.showImage();
-                        }
-                    }
-                }
-        );
-        fileexit.addActionListener(
-                new ActionListener () {
-                    public void actionPerformed (ActionEvent e) {
-                        System.exit(0);
-                    }
-                }
-        );
-
-        fileMenu.add(fileopen);
-        fileMenu.add(fileexit);
-        bar.add(fileMenu);
-    }
-
-    public BufferedImage readImage (String file) {
-
-        Image image = Toolkit.getDefaultToolkit().getImage(file);
-        MediaTracker tracker = new MediaTracker (new Component () {});
-        tracker.addImage(image, 0);
-        try { tracker.waitForID (0); }
-        catch (InterruptedException e) {}
-        BufferedImage bim = new BufferedImage
-                (image.getWidth(this), image.getHeight(this),
-                        BufferedImage.TYPE_INT_RGB);
-        Graphics2D big = bim.createGraphics();
-        big.drawImage (image, 0, 0, this);
-        return bim;
-    }
+//    private void buildMenus () {
+//
+//        final JFileChooser fc = new JFileChooser(".");
+//        JMenuBar bar = new JMenuBar();
+//        this.add (bar);
+//        JMenu fileMenu = new JMenu ("File");
+//        JMenuItem fileopen = new JMenuItem ("Open");
+//        JMenuItem fileexit = new JMenuItem ("Exit");
+//
+//        fileopen.addActionListener(
+//                new ActionListener() {
+//                    public void actionPerformed (ActionEvent e) {
+//                        int returnVal = fc.showOpenDialog(MorphView.this);
+//                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+//                            File file = fc.getSelectedFile();
+//                            try {
+//                                image = ImageIO.read(file);
+//                            } catch (IOException e1){}
+//
+//                            view.setImage(image);
+//                            view.showImage();
+//                        }
+//                    }
+//                }
+//        );
+//        fileexit.addActionListener(
+//                new ActionListener () {
+//                    public void actionPerformed (ActionEvent e) {
+//                        System.exit(0);
+//                    }
+//                }
+//        );
+//
+//        fileMenu.add(fileopen);
+//        fileMenu.add(fileexit);
+//        bar.add(fileMenu);
+//    }
+//
+//    public BufferedImage readImage (String file) {
+//
+//        Image image = Toolkit.getDefaultToolkit().getImage(file);
+//        MediaTracker tracker = new MediaTracker (new Component () {});
+//        tracker.addImage(image, 0);
+//        try { tracker.waitForID (0); }
+//        catch (InterruptedException e) {}
+//        BufferedImage bim = new BufferedImage
+//                (image.getWidth(this), image.getHeight(this),
+//                        BufferedImage.TYPE_INT_RGB);
+//        Graphics2D big = bim.createGraphics();
+//        big.drawImage (image, 0, 0, this);
+//        return bim;
+//    }
 
 }

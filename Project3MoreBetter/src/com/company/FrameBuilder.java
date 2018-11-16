@@ -13,20 +13,18 @@ public class FrameBuilder extends JFrame{
     public FrameBuilder() {
         JFrame morphFrame = new JFrame("Morph");
 //        morphFrame.getContentPane().setLayout(new FlowLayout());
-        MorphGrid morphGridBefore = new MorphGrid(10);
-        MorphGrid morphGridAfter = new MorphGrid(10);
-        MorphView morphView = new MorphView();
+        MorphGrid morphGridBefore = new MorphGrid(10); //grid of control points for first image
+        MorphGrid morphGridAfter = new MorphGrid(10); //grid of control points for second image
+        MorphView morphView = new MorphView(); //panel for morph settings
         JPanel morphGrids = new JPanel();
         JLabel windowLabel = new JLabel("Morpheus");
         windowLabel.setFont (windowLabel.getFont ().deriveFont (64.0f));
         windowLabel.setHorizontalAlignment(JLabel.CENTER);
         morphGrids.add(morphGridBefore, BorderLayout.WEST);
         morphGrids.add(morphGridAfter, BorderLayout.EAST);
-        MorphController morphController = new MorphController(morphGridBefore, morphGridAfter, morphView);
+        MorphController morphController = new MorphController(morphGridBefore, morphGridAfter, morphView); //create instance of the controller
         morphFrame.getContentPane().add(windowLabel, BorderLayout.NORTH);
         morphFrame.getContentPane().add(morphGrids, BorderLayout.CENTER);
-//        morphFrame.getContentPane().add(morphGridBefore, BorderLayout.WEST);
-//        morphFrame.getContentPane().add(morphGridAfter, BorderLayout.EAST);
         morphFrame.getContentPane().add(morphView, BorderLayout.SOUTH);
         morphFrame.setSize(windowWidth, windowHeight);
         morphFrame.setVisible(true);
