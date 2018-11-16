@@ -42,8 +42,13 @@ public class MorphController{
     }
 
     private void rubberBandingWithBoundaries(MouseEvent e, MorphGrid morphGrid){
+
+
         if (e.getX() > morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() & e.getYOnScreen() > morphGrid.getLocation().getY()) {
             morphGrid.updateTriangles(morphGrid.getPanelSize(), e.getY());
+        }
+        if (e.getX() > morphGrid.getPanelSize() && e.getY() < 0) {
+            morphGrid.updateTriangles(morphGrid.getPanelSize(), 0);
         }
         if (e.getY() > morphGrid.getPanelSize() && e.getX() < morphGrid.getPanelSize() & e.getXOnScreen() > morphGrid.getLocation().getX()) {
             morphGrid.updateTriangles(e.getX(), morphGrid.getPanelSize());
@@ -51,19 +56,19 @@ public class MorphController{
         if (e.getX() > morphGrid.getPanelSize() && e.getY() > morphGrid.getPanelSize()) {
             morphGrid.updateTriangles(morphGrid.getPanelSize(), morphGrid.getPanelSize());
         }
-        if (e.getXOnScreen() < morphGrid.getLocation().getX() && e.getY() < morphGrid.getPanelSize() & e.getYOnScreen() > morphGrid.getLocation().getY()) {
+        if (e.getX() < 0 && e.getY() < morphGrid.getPanelSize() & e.getY() > 0) {
             morphGrid.updateTriangles(0, e.getY());
         }
-        if (e.getYOnScreen() < morphGrid.getLocation().getY() && e.getX() < morphGrid.getPanelSize() & e.getXOnScreen() > morphGrid.getLocation().getX()) {
+        if (e.getY() < 0 && e.getX() < morphGrid.getPanelSize() & e.getX() > 0) {
             morphGrid.updateTriangles(e.getX(), 0);
         }
-        if (e.getXOnScreen() < morphGrid.getLocation().getX() && e.getYOnScreen() < morphGrid.getLocation().getY()) {
+        if (e.getX() < 0 && e.getY() < 0) {
             morphGrid.updateTriangles(0, 0);
         }
 //        else{
 //            morphGrid.updateTriangles(e.getX(), e.getY());
 //        }
-        if (e.getX() < morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() && e.getXOnScreen() > morphGrid.getLocation().getX() && e.getYOnScreen() > morphGrid.getLocation().getLocation().getY()){
+        if (e.getX() < morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() && e.getX()> 0 && e.getY() > 0){
             morphGrid.updateTriangles(e.getX(), e.getY());
         }
     }
