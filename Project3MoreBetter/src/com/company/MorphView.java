@@ -15,6 +15,9 @@ public class MorphView extends JPanel{
     private JLabel morphTimeLabel;
     private JLabel morphFrameLabel;
     private JSlider morphTimeSlider;
+    private JSlider gridResSlider;
+    private JLabel gridResLabel;
+
     private JSlider morphFrameSlider;
 
 //    JMenu file;
@@ -30,6 +33,11 @@ public class MorphView extends JPanel{
         //this.add(file);
 //        buildMenus();
 //        this.view = new MyImageObj(readImage("snoop.jpg"));
+        gridResSlider = new JSlider(5,20,10); //controls duration of morph
+        gridResLabel = new JLabel("Grid Resolution: "+gridResSlider.getValue()+"x"+gridResSlider.getValue());
+        gridResSlider.setMajorTickSpacing(5);
+        gridResSlider.setSnapToTicks(true);
+        gridResSlider.getPaintTicks();
         previewMorphButton = new JButton("Preview Morph"); //opens preview window
         resetButton = new JButton("Reset"); //puts control points back to original positions
         morphTimeSlider = new JSlider(1,5,2); //controls duration of morph
@@ -37,6 +45,8 @@ public class MorphView extends JPanel{
         morphTimeLabel = new JLabel("Morph Duration: "+morphTimeSlider.getValue()+" seconds");
         morphFrameLabel = new JLabel("Number of Tween Frames: "+morphFrameSlider.getValue());
 
+        this.add(gridResLabel);
+        this.add(gridResSlider);
         this.add(resetButton);
         this.add(previewMorphButton);
         this.add(morphTimeLabel);
@@ -70,6 +80,14 @@ public class MorphView extends JPanel{
 
     public JLabel getMorphTimeLabel() {
         return morphTimeLabel;
+    }
+
+    public JSlider getGridResSlider(){
+        return gridResSlider;
+    }
+
+    public JLabel getGridResLabel(){
+        return gridResLabel;
     }
 
 //    private void buildMenus () {

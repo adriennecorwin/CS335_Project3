@@ -53,11 +53,11 @@ public class MorphGrid extends JPanel {
                 triangles[this.gridDim-1][i][0] = new Triangle(new ControlPoint(new Point(panelSize-spacing, borderY)), controlPoints[this.gridDim-2][i], new ControlPoint(new Point(panelSize, borderY+spacing)));
                 triangles[this.gridDim-1][i][1] = new Triangle(new ControlPoint(new Point(panelSize-spacing, borderY)), new ControlPoint(new Point(panelSize, borderY)), new ControlPoint(new Point(panelSize, borderY+spacing)));
             }
-            else if(i<10) {
+            else if(i<this.gridDim-1) {
                 triangles[0][i][0] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(0, borderY + spacing)), controlPoints[0][i]);
                 triangles[0][i][1] = new Triangle(new ControlPoint(new Point(0, borderY)), controlPoints[0][i-1], controlPoints[0][i]);
                 triangles[this.gridDim-1][i][0] = new Triangle(controlPoints[this.gridDim-2][i-1], controlPoints[this.gridDim-2][i], new ControlPoint(new Point(panelSize, borderY+spacing)));
-                triangles[this.gridDim-1][i][1] = new Triangle(controlPoints[9][i-1], new ControlPoint(new Point(panelSize, borderY)), new ControlPoint(new Point(panelSize, borderY+spacing)));
+                triangles[this.gridDim-1][i][1] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(panelSize, borderY)), new ControlPoint(new Point(panelSize, borderY+spacing)));
             }
             else{
                 triangles[0][i][0] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(0, panelSize)), new ControlPoint(new Point(spacing, panelSize)));
@@ -88,7 +88,7 @@ public class MorphGrid extends JPanel {
         spacing = panelSize/this.gridDim;
         pointDragged = new int[2];
 
-        setUpGrid();
+        setUpGrid(gridDim);
     }
 
     //DEEP COPY CONSTRUCTOR
@@ -156,7 +156,9 @@ public class MorphGrid extends JPanel {
     }
 
     //initializes the morph grid with triangles and control points
-    public void setUpGrid(){
+    public void setUpGrid(int gridDim){
+        this.gridDim = gridDim+1;
+//        removeAll();
         controlPoints = new ControlPoint[this.gridDim][this.gridDim];
         triangles = new Triangle[this.gridDim][this.gridDim][2];
 

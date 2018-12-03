@@ -20,6 +20,8 @@ public class MorphController{
     private MorphGrid morphGridBefore; //morph grid before morph
     private MorphGrid morphGridAfter; //morph grid after morph
     private MorphGrid previewMorphGrid; //deep copy of first morph grid to show the morph preview animation
+    private int gridDim;
+    private Polygon polygonBound;
 
     //check if the user has selected one of the control points
     //if they have, set point dragged to the position of that control point in the grid
@@ -38,10 +40,20 @@ public class MorphController{
                     currentMorphGrid.setCorrespondingPoint(pointDragged);
                     currentMorphGrid.repaint();
                     correspondingMorphGrid.repaint();
+                    makePolygonBoundary(currentMorphGrid);
                     break;
                 }
             }
         }
+    }
+
+    private void makePolygonBoundary(MorphGrid currentMorphGrid){
+        int polygonXs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getX()};
+        int polygonYs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getY()};
+
+        polygonBound = new Polygon(polygonXs, polygonYs, 6);
+//        int polygonAXs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getX()};
+//        int polygonAYs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getY()};
     }
 
 
@@ -70,7 +82,7 @@ public class MorphController{
         if (e.getX() < 0 && e.getY() < 0) {
             morphGrid.updateTriangles(0, 0);
         }
-        if (e.getX() < morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() && e.getX()> 0 && e.getY() > 0){
+        if (e.getX() < morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() && e.getX()> 0 && e.getY() > 0 && polygonBound.contains(new Point(e.getX(), e.getY()))){
             morphGrid.updateTriangles(e.getX(), e.getY());
         }
     }
@@ -178,8 +190,20 @@ public class MorphController{
         morphView.getResetButton().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                morphGridBefore.setUpGrid();
-                morphGridAfter.setUpGrid();
+                morphGridBefore.setUpGrid(gridDim);
+                morphGridAfter.setUpGrid(gridDim);
+            }
+        });
+
+        morphView.getGridResSlider().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                gridDim = morphView.getGridResSlider().getValue();
+                morphGridBefore.setUpGrid(gridDim);
+                morphGridAfter.setUpGrid(gridDim);
+                morphGridBefore.revalidate();
+                morphGridAfter.revalidate();
+                morphView.getGridResLabel().setText("Grid Resolution: "+morphView.getGridResSlider().getValue()+"x"+morphView.getGridResSlider().getValue());
             }
         });
 
@@ -288,6 +312,8 @@ public class MorphController{
 
         stepsX = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
         stepsY = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
+
+        gridDim = morphView.getGridResSlider().getValue();
 
         addActionListeners(morphView);
 
