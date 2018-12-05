@@ -1,27 +1,56 @@
 package com.company;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.RescaleOp;
+import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
+
 
 public class MorphController{
     private boolean isDragging = false; //true if point is being dragged
     private int pointDragged[]; //row and col of point being dragged in control point grid
     private double stepsX[][]; //amt x position of each control point should change per frame
     private double stepsY[][]; //amt y position of each control point should change
+    private double stepsR[][];
+    private double stepsB[][];
+    private double stepsG[][];
     private Timer previewTimer; //controls animation of control points
+    private Timer morphTimer;
     private int delay; //delay for preview animation timer
     private int frames; //number of tween frames
-    private int frameCount; //number of frames the animation has gone through
+    private int frameCount; //number of frames the preview animation has gone through
+    private int morphFrameCount; //number of frames the animation has gone through
     private JFrame previewFrame; //frame for morph preview
+    private JFrame morphFrame;
+    private JButton morphButton;
     private JButton previewMorphButton; //starts morph preview
     private MorphGrid morphGridBefore; //morph grid before morph
     private MorphGrid morphGridAfter; //morph grid after morph
     private MorphGrid previewMorphGrid; //deep copy of first morph grid to show the morph preview animation
+    private MorphGrid morphGrid;
     private int gridDim;
     private Polygon polygonBound;
+    private MorphTools morphTools;
+    private BufferedImage inputImage;
+    private BufferedImage outputImage;
+    private BufferedImage outputImageMorph;
+    private BufferedImage inputImageMorph;
+    private BufferedImage tweenImage;
+    private Triangle inputTris[][][];
+    private File outputFile;
+
+    private float inputIntensity;
+    private float outputIntensity;
+
+
 
     //check if the user has selected one of the control points
     //if they have, set point dragged to the position of that control point in the grid
@@ -47,14 +76,53 @@ public class MorphController{
         }
     }
 
-    private void makePolygonBoundary(MorphGrid currentMorphGrid){
-        int polygonXs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getX()};
-        int polygonYs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getY()};
+    private void makePolygonBoundary(MorphGrid currentMorphGrid) {
+        if (pointDragged[0] - 1 >= 0 && pointDragged[1] - 1 >= 0 && pointDragged[0] + 1 < gridDim && pointDragged[1] + 1 < gridDim) {
+            int polygonXs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+        } else if (pointDragged[0] - 1 < 0 && pointDragged[1] - 1 < 0) {
+            int polygonXs[] = {(int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV1().getX(), (int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV2().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getTriangles()[0][pointDragged[1]][0].getV2().getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV1().getY(), (int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV2().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getTriangles()[0][pointDragged[1]][0].getV2().getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
 
-        polygonBound = new Polygon(polygonXs, polygonYs, 6);
-//        int polygonAXs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getX(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getX()};
-//        int polygonAYs[] = {(int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]+1].getY(), (int)currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getY()};
+        } else if (pointDragged[0] - 1 < 0 && pointDragged[1] + 1 >= gridDim) {
+            int polygonXs[] = {(int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV1().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][gridDim][0].getV3().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][gridDim][0].getV2().getX(), (int) currentMorphGrid.getTriangles()[0][gridDim][0].getV1().getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV1().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][gridDim][0].getV3().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][gridDim][0].getV2().getY(), (int) currentMorphGrid.getTriangles()[0][gridDim][0].getV1().getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+
+        } else if (pointDragged[0] - 1 < 0) {
+            int polygonXs[] = {(int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV1().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getTriangles()[0][pointDragged[0]][0].getV2().getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getTriangles()[0][pointDragged[1]][1].getV1().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1]].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] + 1][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getTriangles()[0][pointDragged[1]+1][0].getV1().getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+
+        } else if (pointDragged[0] + 1 >= gridDim && pointDragged[1] + 1 >= gridDim) {
+            int polygonXs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV2().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV3().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][0].getV2().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV2().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV3().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][0].getV2().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+
+        }  else if (pointDragged[0] + 1 >= gridDim && pointDragged[1]-1<0) {
+            int polygonXs[] = {(int) currentMorphGrid.getTriangles()[pointDragged[0]][0][0].getV1().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0]+1][0][0].getV1().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1]][1].getV3().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV3().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getTriangles()[pointDragged[0]][0][0].getV1().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0]+1][0][0].getV1().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1]][1].getV3().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV3().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+
+        } else if (pointDragged[0] + 1 >= gridDim) {
+            int polygonXs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV2().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV3().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] - 1].getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV2().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0] + 1][pointDragged[1] + 1][1].getV3().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0] - 1][pointDragged[1]].getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+        }
+        else if (pointDragged[1]-1<0) {
+            int polygonXs[] = {(int) currentMorphGrid.getTriangles()[pointDragged[0]][0][0].getV1().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0]][pointDragged[1]][1].getV2().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getTriangles()[pointDragged[0]][0][0].getV1().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0]][pointDragged[1]][1].getV2().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]+1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1] + 1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+        }
+        else if (pointDragged[1]+1>=gridDim) {
+            int polygonXs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0]+1][pointDragged[1] + 1][0].getV3().getX(), (int) currentMorphGrid.getTriangles()[pointDragged[0]+1][pointDragged[1] + 1][0].getV2().getX(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getX()};
+            int polygonYs[] = {(int) currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]-1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]][pointDragged[1]-1].getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]+1][pointDragged[1]].getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0]+1][pointDragged[1] + 1][0].getV3().getY(), (int) currentMorphGrid.getTriangles()[pointDragged[0]+1][pointDragged[1] + 1][0].getV2().getY(), (int) currentMorphGrid.getControlPoints()[pointDragged[0]-1][pointDragged[1]].getY()};
+            polygonBound = new Polygon(polygonXs, polygonYs, 6);
+        }
     }
+
 
 
     //force dragged point to stay in panel bounds
@@ -117,6 +185,88 @@ public class MorphController{
         }
     }
 
+    private void animateWarpTriangles(){
+        morphFrameCount++;
+        if(morphFrameCount<frames){
+            for (int i = 0; i < morphGrid.getGridDim() - 1; i++) {
+                for (int j = 0; j < morphGrid.getGridDim() - 1; j++) {
+                    if (stepsX[j][i] != 0 || stepsY[j][i] != 0) {
+                        morphGrid.getControlPoints()[j][i].setXY((int) (morphGridBefore.getControlPoints()[j][i].getX() + stepsX[j][i] * morphFrameCount), (int) (morphGridBefore.getControlPoints()[j][i].getY() + stepsY[j][i] * morphFrameCount));
+                        morphGrid.updateTrianglePreview(j, i, morphGrid.getControlPoints()[j][i]);
+                    }
+                }
+            }
+
+            for(int i=0; i<morphGrid.getGridDim(); i++) {
+                for (int j = 0; j < morphGrid.getGridDim(); j++) {
+                    for (int k = 0; k <= 1; k++) {
+                        if (inputTris[j][i][k] != null) {
+                            if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
+                                morphTools.warpTriangle(inputImageMorph, tweenImage, inputTris[j][i][k], morphGrid.getTriangles()[j][i][k], null, null);
+                                morphGrid.setImage(tweenImage);
+                                morphGrid.repaint();
+                            }
+
+                        }
+                    }
+                }
+            }
+            
+
+//            for(int y=0; y<tweenImage.getHeight(); y++){
+//                for(int x=0; x<tweenImage.getWidth(); x++){
+//                    Color inputColor = new Color(inputImage.getRGB(x, y));
+//                    Color outputColor = new Color((int)(inputColor.getRed()+stepsR[x][y]*morphFrameCount), (int)(inputColor.getGreen()+stepsG[x][y]*morphFrameCount), (int)(inputColor.getBlue()+stepsB[x][y]*morphFrameCount));
+//                    tweenImage.setRGB(x, y, outputColor.getRGB());
+//                    morphGrid.setImage(tweenImage);
+//                }
+//            }
+
+            //https://examples.javacodegeeks.com/desktop-java/imageio/create-image-file-from-graphics-object/
+            File file = new File("tween"+morphFrameCount+".jpg");
+            try{
+                ImageIO.write(tweenImage, "jpg", file);
+            }
+            catch (IOException e1){}
+            try{
+                tweenImage = ImageIO.read(file);
+                morphGrid.setImage(tweenImage);
+            }
+            catch (IOException e1){}
+            morphGrid.repaint();
+        }
+        else{
+            for (int i = 0; i < morphGrid.getGridDim() - 1; i++) {
+                for (int j = 0; j < morphGrid.getGridDim() - 1; j++) {
+                    if (morphGrid.getControlPoints()[j][i].getX() != morphGridAfter.getControlPoints()[j][i].getX() || morphGrid.getControlPoints()[j][i].getY() != morphGridAfter.getControlPoints()[j][i].getY()) {
+                        morphGrid.getControlPoints()[j][i].setXY((int) morphGridAfter.getControlPoints()[j][i].getX(), (int) morphGridAfter.getControlPoints()[j][i].getY());
+                        morphGrid.updateTrianglePreview(j, i, morphGrid.getControlPoints()[j][i]);
+                    }
+                }
+            }
+            for(int y=0; y<inputImageMorph.getHeight(); y++) {
+                for (int x = 0; x < inputImageMorph.getWidth(); x++) {
+                    Color finalOutputColor = new Color(outputImage.getRGB(x, y));
+                    Color tweenOutputColor = new Color(tweenImage.getRGB(x, y));
+                    if(tweenOutputColor.getRed()!=finalOutputColor.getRed() || tweenOutputColor.getGreen()!=finalOutputColor.getGreen() || tweenOutputColor.getBlue()!=finalOutputColor.getBlue()){
+                        tweenImage.setRGB(x, y, finalOutputColor.getRGB());
+                    }
+                }
+            }
+            morphTimer.stop();
+        }
+    }
+
+    private void copyTriangles(MorphGrid morphGrid){
+        for(int i=0; i<morphGrid.getGridDim(); i++) {
+            for (int j = 0; j < morphGrid.getGridDim(); j++) {
+                for (int k = 0; k <= 1; k++) {
+                    inputTris[j][i][k]= new Triangle(new ControlPoint((int)morphGrid.getTriangles()[j][i][k].getV1().getX(), (int)morphGrid.getTriangles()[j][i][k].getV1().getY()), new ControlPoint((int)morphGrid.getTriangles()[j][i][k].getV2().getX(), (int)morphGrid.getTriangles()[j][i][k].getV2().getY()), new ControlPoint((int)morphGrid.getTriangles()[j][i][k].getV3().getX(), (int)morphGrid.getTriangles()[j][i][k].getV3().getY()));
+                }
+            }
+        }
+    }
+
     private void addActionListeners(MorphView morphView){
 
         //add mouse listeners for both morph grid panels for dragging and rubberbanding
@@ -173,6 +323,13 @@ public class MorphController{
             }
         });
 
+        morphTimer = new Timer(delay / frames, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                animateWarpTriangles();
+            }
+        });
+
         //open preview window when preview morph button clicked
         morphView.getPreviewMorphButton().addActionListener(new ActionListener() {
             @Override
@@ -182,7 +339,6 @@ public class MorphController{
                 makePreviewFrame();
                 calcSteps(frames, previewMorphGrid); //calculate x and y steps to go from starting position to ending position
                 frameCount=0;
-
             }
         });
 
@@ -212,6 +368,7 @@ public class MorphController{
             @Override
             public void stateChanged(ChangeEvent e) {
                 previewTimer.stop();
+                morphTimer.stop();
                 morphView.getMorphTimeLabel().setText("Morph Duration: "+morphView.getMorphTimeSlider().getValue()+" seconds");
                 delay = morphView.getMorphTimeSlider().getValue()*1000; //(*1000 for milliseconds)
                 if(delay%frames!=0) { //(for floating point to int error)
@@ -224,6 +381,13 @@ public class MorphController{
                     }
                 });
                 previewTimer.start();
+                morphTimer = new Timer(delay/frames, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        animateWarpTriangles();
+                    }
+                });
+//                morphTimer.start();
             }
         });
 
@@ -233,6 +397,7 @@ public class MorphController{
             @Override
             public void stateChanged(ChangeEvent e) {
                 previewTimer.stop();
+                morphTimer.stop();
                 frames = morphView.getMorphFrameSlider().getValue();
                 morphView.getMorphFrameLabel().setText("Frames Per Second: "+frames);
                 calcSteps(frames, previewMorphGrid);
@@ -243,8 +408,80 @@ public class MorphController{
                     }
                 });
                 previewTimer.start();
+                morphTimer = new Timer(delay/frames, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        animateWarpTriangles();
+                    }
+                });
+//                morphTimer.start();
             }
         });
+
+        morphView.getFileOpenInput().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int returnVal = morphView.getFc().showOpenDialog(morphView);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = morphView.getFc().getSelectedFile();
+                    try {
+                        inputImage = ImageIO.read(file);
+                        inputImageMorph = ImageIO.read(file);
+                        morphGridBefore.setImage(inputImage);
+                    } catch (IOException e1){}
+                }
+            }
+        });
+
+        morphView.getFileOpenOutput().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int returnVal = morphView.getFc().showOpenDialog(morphView);
+                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                    File file = morphView.getFc().getSelectedFile();
+                    try {
+                        outputImage = ImageIO.read(file);
+                        outputImageMorph = ImageIO.read(file);
+                        morphGridAfter.setImage(outputImage);
+                    } catch (IOException e1){}
+                }
+            }
+        });
+
+        morphView.getMorphButton().addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                morphTimer.stop();
+                morphFrameCount = 0;
+                makeMorphFrame();
+            }
+        });
+
+        morphView.getInputIntensitySlider().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                BufferedImage inputImageCopy;
+                ColorModel cm = inputImage.getColorModel();
+                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                WritableRaster raster = inputImage.copyData(null);
+                inputImageCopy = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                inputIntensity = morphView.getInputIntensitySlider().getValue();
+                RescaleOp rescaleOp = new RescaleOp(inputIntensity/100, 0, null);
+                inputImage = rescaleOp.filter(inputImageCopy, inputImageCopy);
+                morphGridBefore.setImage(inputImageCopy);
+            }
+        });
+
+        morphView.getOutputIntensitySlider().addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                outputIntensity = morphView.getOutputIntensitySlider().getValue();
+                RescaleOp rescaleOp = new RescaleOp(outputIntensity/100, 0, null);
+                outputImage = rescaleOp.filter(outputImage, outputImage);
+                morphGridAfter.setImage(outputImage);
+            }
+        });
+
     }
 
     //creates the preview morph frame with preview morph button to start animation
@@ -266,6 +503,42 @@ public class MorphController{
         });
     }
 
+    private void makeMorphFrame(){
+        morphGrid = new MorphGrid(morphGridBefore);
+        morphFrame = new JFrame("Morph");
+        morphButton = new JButton("Morph");
+        morphFrame.setLayout(new FlowLayout());
+        morphFrame.getContentPane().add(morphGrid);
+        morphFrame.getContentPane().add(morphButton);
+        morphFrame.setSize(700, 700);
+        morphFrame.setVisible(true);
+
+        morphButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+//                for(int i=0; i<gridDim; i++){
+//                    for(int j=0; j<gridDim; j++){
+//                        for(int k=0; k<=1; k++){
+//                            morphTools.warpTriangle(inputImageMorph, outputImageMorph, morphGrid.getTriangles()[i][j][k], morphGridAfter.getTriangles()[i][j][k], null, null);
+//                        }
+//                    }
+//                }
+                morphFrameCount = 0;
+                morphFrame.getContentPane().removeAll();
+                morphGrid = new MorphGrid(MorphController.this.morphGridBefore);
+                morphFrame.getContentPane().add(morphGrid);
+                morphFrame.getContentPane().add(morphButton);
+                calcSteps(frames, morphGrid);
+                calcStepsRGB(frames, morphGridBefore.getImage(), morphGridAfter.getImage());
+                morphGrid.repaint();
+                morphGrid.revalidate();
+                morphGrid.setVisible(true);
+                copyTriangles(morphGridBefore);
+                morphTimer.start();
+            }
+        });
+    }
+
     //calculate distance between each point in before grid and each point in after grid
     //divide by number of frames specified to get how much x and y should move per timer fire to make animation
     private void calcSteps(int frames, MorphGrid previewMorphGrid){
@@ -274,6 +547,29 @@ public class MorphController{
             for (int j = 0; j < previewMorphGrid.getGridDim() - 1; j++) {
                 stepsX[j][i] = (morphGridAfter.getControlPoints()[j][i].getX()-previewMorphGrid.getControlPoints()[j][i].getX())/frames;
                 stepsY[j][i] = (morphGridAfter.getControlPoints()[j][i].getY()-previewMorphGrid.getControlPoints()[j][i].getY())/frames;
+            }
+        }
+    }
+
+    //inspired by http://www.informit.com/articles/article.aspx?p=1245201
+    private void calcStepsRGB(int frames, BufferedImage inputImage, BufferedImage outputImage){
+        for(int y=0; y<inputImage.getHeight(); y++){
+            for(int x=0; x<inputImage.getWidth(); x++){
+                int inputRGB = inputImage.getRGB(x,y);
+                Color inputColor = new Color(inputRGB);
+                int outputRGB = outputImage.getRGB(x,y);
+                Color outputColor = new Color(outputRGB);
+                int inputR = inputColor.getRed();
+                int inputG = inputColor.getGreen();
+                int inputB = inputColor.getBlue();
+
+                int outputR = outputColor.getRed();
+                int outputG = outputColor.getGreen();
+                int outputB = outputColor.getBlue();
+
+                stepsR[x][y] = ((float)outputR - (float)inputR)/frames;
+                stepsG[x][y] = ((float)outputG - (float)inputG)/frames;
+                stepsB[x][y] = ((float)outputB - (float)inputB)/frames;
             }
         }
     }
@@ -307,17 +603,41 @@ public class MorphController{
         morphGridBefore.setPointDragged(pointDragged);
         morphGridAfter.setPointDragged(pointDragged);
 
+        try {
+            inputImage = ImageIO.read(new File("spoon.jpg"));
+            inputImageMorph = ImageIO.read(new File("spoon.jpg"));
+            tweenImage = ImageIO.read(new File("spoon.jpg"));
+            outputImage = ImageIO.read(new File("spoon2.jpg"));
+            outputImageMorph = ImageIO.read(new File("spoon2.jpg"));
+            morphGridBefore.setImage(inputImage);
+            morphGridAfter.setImage(outputImage);
+        }
+        catch (IOException e1){}
+
         //make deep copy of before grid for preview animation frame
         previewMorphGrid = new MorphGrid(MorphController.this.morphGridBefore);
 
         stepsX = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
         stepsY = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
 
+        stepsR = new double[inputImage.getWidth()][inputImage.getHeight()];
+        stepsG = new double[inputImage.getWidth()][inputImage.getHeight()];
+        stepsB = new double[inputImage.getWidth()][inputImage.getHeight()];
+
+
         gridDim = morphView.getGridResSlider().getValue();
 
-        addActionListeners(morphView);
+        morphTools = new MorphTools();
+        inputTris = new Triangle[gridDim+1][gridDim+1][2];
 
+        morphGridBefore.setImage(inputImage);
+        morphGridAfter.setImage(outputImage);
+
+        morphGridAfter.repaint();
+        addActionListeners(morphView);
     }
+
+
 
 
 }

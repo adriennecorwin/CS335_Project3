@@ -2,6 +2,9 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.WritableRaster;
+import java.awt.image.ColorModel;
 
 public class MorphGrid extends JPanel {
     private int gridDim; //number of control points in each row and col
@@ -12,6 +15,8 @@ public class MorphGrid extends JPanel {
     private ControlPoint correspondingPoint; //corresponding point of point selected from other grid
     private ControlPoint controlPoints[][]; // array of control points
     private Triangle triangles[][][]; //array for triangles indicating row, col, and upper or lower triangle
+    private BufferedImage image;
+
 
     //create gridDim*gridDim control points with positions spaced equally apart in panel
     private void setUpControlPoints(){
@@ -28,6 +33,33 @@ public class MorphGrid extends JPanel {
             y+=spacing;
             x=spacing;
         }
+
+//        int ybord=0;
+//        for(int i=0; i<=gridDim; i++){
+//            ControlPoint controlPoint1 = new ControlPoint(new Point(0, ybord));
+//            ControlPoint controlPoint2 = new ControlPoint(new Point(panelSize, ybord));
+//
+//            controlPoint1.setRowCol(0, i);
+//            controlPoint2.setRowCol(gridDim, i);
+//
+//            controlPoints[0][i] = controlPoint1;
+//            controlPoints[gridDim][i] = controlPoint2;
+//            ybord+=spacing;
+//        }
+//
+//        int xbord=0;
+//        for(int i=1; i<=gridDim; i++){
+//            ControlPoint controlPoint1 = new ControlPoint(new Point(i, xbord));
+//            ControlPoint controlPoint2 = new ControlPoint(new Point(i, panelSize));
+//
+//            controlPoint1.setRowCol(i, 0);
+//            controlPoint2.setRowCol(i, gridDim);
+//
+//            controlPoints[i][0] = controlPoint1;
+//            controlPoints[i][gridDim] = controlPoint2;
+//            xbord+=spacing;
+//        }
+
     }
 
 
@@ -41,6 +73,13 @@ public class MorphGrid extends JPanel {
                 triangles[j][i][1] = new Triangle(controlPoints[j-1][i-1], controlPoints[j][i-1], controlPoints[j][i]);
             }
         }
+
+//        for(int i=0; i<this.gridDim; i++) {
+//            for (int j=0; j<this.gridDim; j++) {
+//                triangles[j][i][0] = new Triangle(controlPoints[j][i], controlPoints[j+1][i], controlPoints[j+1][i+1]);
+//                triangles[j][i][1] = new Triangle(controlPoints[j][i], controlPoints[j][i+1], controlPoints[j+1][i+1]);
+//            }
+//        }
 
         //make border triangles
 
@@ -87,7 +126,6 @@ public class MorphGrid extends JPanel {
         this.gridDim=gridDim+1;
         spacing = panelSize/this.gridDim;
         pointDragged = new int[2];
-
         setUpGrid(gridDim);
     }
 
@@ -97,6 +135,13 @@ public class MorphGrid extends JPanel {
         this.gridDim = toCopy.gridDim;
         this.panelSize = toCopy.panelSize;
         this.spacing = toCopy.spacing;
+
+        //http://www.javased.com/?post=3514158
+        ColorModel cm = toCopy.image.getColorModel();
+        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+        WritableRaster raster = toCopy.image.copyData(null);
+        this.image = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+
         this.correspondingPoint = toCopy.correspondingPoint;
         this.controlPoints = new ControlPoint[this.gridDim-1][this.gridDim-1];
         for(int i=0; i<this.gridDim-1; i++){
@@ -125,6 +170,7 @@ public class MorphGrid extends JPanel {
         g.setColor(Color.BLACK);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.BLACK);
+        ((Graphics2D) g).drawImage(image, 0, 0, this);
         for(int i=0; i<this.gridDim-1; i++){
             for(int j=0; j<this.gridDim-1; j++){
                 if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
@@ -158,8 +204,7 @@ public class MorphGrid extends JPanel {
     //initializes the morph grid with triangles and control points
     public void setUpGrid(int gridDim){
         this.gridDim = gridDim+1;
-//        removeAll();
-        controlPoints = new ControlPoint[this.gridDim][this.gridDim];
+        controlPoints = new ControlPoint[this.gridDim-1][this.gridDim-1];
         triangles = new Triangle[this.gridDim][this.gridDim][2];
 
         setUpControlPoints();
@@ -199,10 +244,12 @@ public class MorphGrid extends JPanel {
     //(need row and col instead of control point bc the control point's position will change but its row and col pos in array won't
     //so this ensures we update same control point even when it has different x, y position)
     //update that vertex to new position and redraw triangle
-    public void updateTrianglePreview(int row, int col, ControlPoint after){
+    public Triangle[][][] updateTrianglePreview(int row, int col, ControlPoint after){
+        Triangle inputTris[][][] = new Triangle[gridDim][gridDim][2];
         for(int i=0; i<gridDim; i++) {
             for (int j = 0; j < gridDim; j++) {
                 for (int k = 0; k <= 1; k++) {
+                    inputTris[j][i][k] = new Triangle(triangles[j][i][k].getV1(), triangles[j][i][k].getV2(), triangles[j][i][k].getV3());
                     if (triangles[j][i][k].controlledBy(row, col) == 1) {
                         triangles[j][i][k].setControlPoint(1, after);
                     }
@@ -216,6 +263,7 @@ public class MorphGrid extends JPanel {
             }
         }
         repaint();
+        return inputTris;
     }
 
 
@@ -236,10 +284,21 @@ public class MorphGrid extends JPanel {
         return controlPoints;
     }
 
+    public Triangle[][][] getTriangles(){
+        return triangles;
+    }
+
     public int getPanelSize(){
         return panelSize;
     }
 
+    public void setImage(BufferedImage image){
+        this.image = image;
+        repaint();
+    }
 
+    public BufferedImage getImage(){
+        return image;
+    }
 
 }

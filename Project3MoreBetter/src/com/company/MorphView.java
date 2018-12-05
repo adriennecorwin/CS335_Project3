@@ -1,13 +1,8 @@
 package com.company;
 
-import javax.imageio.ImageIO;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class MorphView extends JPanel{
     private JButton previewMorphButton;
@@ -17,22 +12,21 @@ public class MorphView extends JPanel{
     private JSlider morphTimeSlider;
     private JSlider gridResSlider;
     private JLabel gridResLabel;
-
     private JSlider morphFrameSlider;
+    private JButton morphButton;
 
-//    JMenu file;
-//    private BufferedImage image;
-//    private BufferedImage bim=null;
-//    private BufferedImage filteredbim=null;
-//    private boolean showfiltered=false;
-    private MyImageObj view;
+    private JSlider inputIntensitySlider;
+    private JSlider outputIntensitySlider;
+    private JLabel inputIntensityLabel;
+    private JLabel outputIntensityLabel;
+
+    private JFileChooser fc;
+    private JButton fileOpenInput;
+    private JButton fileOpenOutput;
 
     public MorphView(){
-        previewMorphButton = new JButton("Preview Morph");
-        //file = new JMenu("File");
-        //this.add(file);
-//        buildMenus();
-//        this.view = new MyImageObj(readImage("snoop.jpg"));
+        setLayout(new GridLayout(3, 5));
+//        previewMorphButton = new JButton("Preview Morph");
         gridResSlider = new JSlider(5,20,10); //controls duration of morph
         gridResLabel = new JLabel("Grid Resolution: "+gridResSlider.getValue()+"x"+gridResSlider.getValue());
         gridResSlider.setMajorTickSpacing(5);
@@ -44,16 +38,33 @@ public class MorphView extends JPanel{
         morphFrameSlider = new JSlider(5, 60, 10); //controls number of tween frames
         morphTimeLabel = new JLabel("Morph Duration: "+morphTimeSlider.getValue()+" seconds");
         morphFrameLabel = new JLabel("Number of Tween Frames: "+morphFrameSlider.getValue());
+        morphButton = new JButton("Morph");
+        inputIntensitySlider = new JSlider(1, 500, 100);
+        outputIntensitySlider = new JSlider(1, 500, 100);
+        inputIntensityLabel = new JLabel("Input Intensity");
+        outputIntensityLabel = new JLabel("Output Intensity");
+        fileOpenInput = new JButton("Set Input Image");
+        fileOpenOutput = new JButton("Set Output Image");
+
+        fc = new JFileChooser(".");
 
         this.add(gridResLabel);
+        this.add(morphTimeLabel);
+        this.add(morphFrameLabel);
+        this.add(inputIntensityLabel);
+        this.add(outputIntensityLabel);
+
         this.add(gridResSlider);
+        this.add(morphTimeSlider);
+        this.add(morphFrameSlider);
+        this.add(inputIntensitySlider);
+        this.add(outputIntensitySlider);
+
+        this.add(fileOpenInput);
+        this.add(fileOpenOutput);
         this.add(resetButton);
         this.add(previewMorphButton);
-        this.add(morphTimeLabel);
-        this.add(morphTimeSlider);
-        this.add(morphFrameLabel);
-        this.add(morphFrameSlider);
-        this.add(previewMorphButton);
+        this.add(morphButton);
     }
 
     //GETTERS
@@ -90,57 +101,27 @@ public class MorphView extends JPanel{
         return gridResLabel;
     }
 
-//    private void buildMenus () {
-//
-//        final JFileChooser fc = new JFileChooser(".");
-//        JMenuBar bar = new JMenuBar();
-//        this.add (bar);
-//        JMenu fileMenu = new JMenu ("File");
-//        JMenuItem fileopen = new JMenuItem ("Open");
-//        JMenuItem fileexit = new JMenuItem ("Exit");
-//
-//        fileopen.addActionListener(
-//                new ActionListener() {
-//                    public void actionPerformed (ActionEvent e) {
-//                        int returnVal = fc.showOpenDialog(MorphView.this);
-//                        if (returnVal == JFileChooser.APPROVE_OPTION) {
-//                            File file = fc.getSelectedFile();
-//                            try {
-//                                image = ImageIO.read(file);
-//                            } catch (IOException e1){}
-//
-//                            view.setImage(image);
-//                            view.showImage();
-//                        }
-//                    }
-//                }
-//        );
-//        fileexit.addActionListener(
-//                new ActionListener () {
-//                    public void actionPerformed (ActionEvent e) {
-//                        System.exit(0);
-//                    }
-//                }
-//        );
-//
-//        fileMenu.add(fileopen);
-//        fileMenu.add(fileexit);
-//        bar.add(fileMenu);
-//    }
-//
-//    public BufferedImage readImage (String file) {
-//
-//        Image image = Toolkit.getDefaultToolkit().getImage(file);
-//        MediaTracker tracker = new MediaTracker (new Component () {});
-//        tracker.addImage(image, 0);
-//        try { tracker.waitForID (0); }
-//        catch (InterruptedException e) {}
-//        BufferedImage bim = new BufferedImage
-//                (image.getWidth(this), image.getHeight(this),
-//                        BufferedImage.TYPE_INT_RGB);
-//        Graphics2D big = bim.createGraphics();
-//        big.drawImage (image, 0, 0, this);
-//        return bim;
-//    }
+    public JButton getFileOpenInput(){
+        return fileOpenInput;
+    }
 
+    public JButton getFileOpenOutput(){
+        return fileOpenOutput;
+    }
+
+    public JFileChooser getFc(){
+        return fc;
+    }
+
+    public JButton getMorphButton(){
+        return morphButton;
+    }
+
+    public JSlider getInputIntensitySlider(){
+        return inputIntensitySlider;
+    }
+
+    public JSlider getOutputIntensitySlider(){
+        return outputIntensitySlider;
+    }
 }

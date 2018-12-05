@@ -64,5 +64,20 @@ public class Triangle {
         return v3;
     }
 
+    public ControlPoint getV(int i){
+        if(i==1){
+            return v1;
+        }
+        else if(i==2){
+            return v2;
+        }
+        else if(i==3){
+            return v3;
+        }
+        else{
+            return null;
+        }
+    }
+
 
 }
