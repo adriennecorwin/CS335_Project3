@@ -16,6 +16,8 @@ public class MorphGrid extends JPanel {
     private ControlPoint controlPoints[][]; // array of control points
     private Triangle triangles[][][]; //array for triangles indicating row, col, and upper or lower triangle
     private BufferedImage image;
+    private BufferedImage outputImage;
+    private float alpha;
 
 
     //create gridDim*gridDim control points with positions spaced equally apart in panel
@@ -126,6 +128,8 @@ public class MorphGrid extends JPanel {
         this.gridDim=gridDim+1;
         spacing = panelSize/this.gridDim;
         pointDragged = new int[2];
+        outputImage = null;
+        alpha=0;
         setUpGrid(gridDim);
     }
 
@@ -135,7 +139,7 @@ public class MorphGrid extends JPanel {
         this.gridDim = toCopy.gridDim;
         this.panelSize = toCopy.panelSize;
         this.spacing = toCopy.spacing;
-
+        this.outputImage = null;
         //http://www.javased.com/?post=3514158
         ColorModel cm = toCopy.image.getColorModel();
         boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
@@ -162,6 +166,7 @@ public class MorphGrid extends JPanel {
         }
         this.pointDragged = toCopy.pointDragged;
         isCopy=true;
+        this.alpha=0;
     }
 
     //paints triangles and control points in panel
@@ -170,7 +175,19 @@ public class MorphGrid extends JPanel {
         g.setColor(Color.BLACK);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.BLACK);
+        if(outputImage!=null) {
+            if(alpha<=1) {
+                g2.setComposite(AlphaComposite.SrcOver.derive(alpha));
+            }
+            ((Graphics2D) g).drawImage(outputImage, 0, 0, this);
+        }
+        if(alpha>=0) {
+            g2.setComposite(AlphaComposite.SrcOver.derive((float) 1 - alpha));
+        }
         ((Graphics2D) g).drawImage(image, 0, 0, this);
+
+        g2.setComposite(AlphaComposite.SrcOver.derive((float)1));
+
         for(int i=0; i<this.gridDim-1; i++){
             for(int j=0; j<this.gridDim-1; j++){
                 if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
@@ -297,8 +314,16 @@ public class MorphGrid extends JPanel {
         repaint();
     }
 
+    public void setOutputImage(BufferedImage outputImage){
+        this.outputImage = outputImage;
+    }
+
     public BufferedImage getImage(){
         return image;
+    }
+
+    public void setAlpha(float alpha){
+        this.alpha = alpha;
     }
 
 }

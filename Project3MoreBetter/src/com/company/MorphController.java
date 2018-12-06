@@ -19,9 +19,6 @@ public class MorphController{
     private int pointDragged[]; //row and col of point being dragged in control point grid
     private double stepsX[][]; //amt x position of each control point should change per frame
     private double stepsY[][]; //amt y position of each control point should change
-    private double stepsR[][];
-    private double stepsB[][];
-    private double stepsG[][];
     private Timer previewTimer; //controls animation of control points
     private Timer morphTimer;
     private int delay; //delay for preview animation timer
@@ -43,8 +40,11 @@ public class MorphController{
     private BufferedImage outputImage;
     private BufferedImage outputImageMorph;
     private BufferedImage inputImageMorph;
-    private BufferedImage tweenImage;
+    private BufferedImage tweenImageInput;
+    private BufferedImage tweenImageOutput;
     private Triangle inputTris[][][];
+    private Triangle outputTris[][][];
+    private float alpha;
     private File outputFile;
 
     private float inputIntensity;
@@ -187,6 +187,8 @@ public class MorphController{
 
     private void animateWarpTriangles(){
         morphFrameCount++;
+        alpha+=(float)1/frames;
+        morphGrid.setAlpha(alpha);
         if(morphFrameCount<frames){
             for (int i = 0; i < morphGrid.getGridDim() - 1; i++) {
                 for (int j = 0; j < morphGrid.getGridDim() - 1; j++) {
@@ -202,8 +204,10 @@ public class MorphController{
                     for (int k = 0; k <= 1; k++) {
                         if (inputTris[j][i][k] != null) {
                             if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
-                                morphTools.warpTriangle(inputImageMorph, tweenImage, inputTris[j][i][k], morphGrid.getTriangles()[j][i][k], null, null);
-                                morphGrid.setImage(tweenImage);
+                                morphTools.warpTriangle(inputImageMorph, tweenImageInput, inputTris[j][i][k], morphGrid.getTriangles()[j][i][k], null, null);
+                                morphTools.warpTriangle(outputImageMorph, tweenImageOutput, outputTris[j][i][1-k], morphGrid.getTriangles()[j][i][1-k], null, null);
+                                morphGrid.setOutputImage(tweenImageOutput);
+                                morphGrid.setImage(tweenImageInput);
                                 morphGrid.repaint();
                             }
 
@@ -211,29 +215,17 @@ public class MorphController{
                     }
                 }
             }
-            
-
-//            for(int y=0; y<tweenImage.getHeight(); y++){
-//                for(int x=0; x<tweenImage.getWidth(); x++){
-//                    Color inputColor = new Color(inputImage.getRGB(x, y));
-//                    Color outputColor = new Color((int)(inputColor.getRed()+stepsR[x][y]*morphFrameCount), (int)(inputColor.getGreen()+stepsG[x][y]*morphFrameCount), (int)(inputColor.getBlue()+stepsB[x][y]*morphFrameCount));
-//                    tweenImage.setRGB(x, y, outputColor.getRGB());
-//                    morphGrid.setImage(tweenImage);
-//                }
-//            }
-
             //https://examples.javacodegeeks.com/desktop-java/imageio/create-image-file-from-graphics-object/
-            File file = new File("tween"+morphFrameCount+".jpg");
-            try{
-                ImageIO.write(tweenImage, "jpg", file);
-            }
-            catch (IOException e1){}
-            try{
-                tweenImage = ImageIO.read(file);
-                morphGrid.setImage(tweenImage);
-            }
-            catch (IOException e1){}
-            morphGrid.repaint();
+//            File file = new File("tween"+morphFrameCount+".jpg");
+//            try{
+//                ImageIO.write(tweenImage, "jpg", file);
+//            }
+//            catch (IOException e1){}
+//            try{
+//                tweenImage = ImageIO.read(file);
+//                morphGrid.setImage(tweenImage);
+//            }
+//            catch (IOException e1){}
         }
         else{
             for (int i = 0; i < morphGrid.getGridDim() - 1; i++) {
@@ -244,27 +236,40 @@ public class MorphController{
                     }
                 }
             }
-            for(int y=0; y<inputImageMorph.getHeight(); y++) {
-                for (int x = 0; x < inputImageMorph.getWidth(); x++) {
-                    Color finalOutputColor = new Color(outputImage.getRGB(x, y));
-                    Color tweenOutputColor = new Color(tweenImage.getRGB(x, y));
-                    if(tweenOutputColor.getRed()!=finalOutputColor.getRed() || tweenOutputColor.getGreen()!=finalOutputColor.getGreen() || tweenOutputColor.getBlue()!=finalOutputColor.getBlue()){
-                        tweenImage.setRGB(x, y, finalOutputColor.getRGB());
+            for(int i=0; i<morphGrid.getGridDim(); i++) {
+                for (int j = 0; j < morphGrid.getGridDim(); j++) {
+                    for (int k = 0; k <= 1; k++) {
+                        if (inputTris[j][i][k] != null) {
+                            if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
+                                morphTools.warpTriangle(inputImageMorph, tweenImageInput, inputTris[j][i][k], outputTris[j][i][k], null, null);
+                                morphTools.warpTriangle(outputImageMorph, tweenImageOutput, outputTris[j][i][1-k], outputTris[j][i][1-k], null, null);
+                                morphGrid.setOutputImage(tweenImageOutput);
+                                morphGrid.setImage(tweenImageInput);
+                                morphGrid.repaint();
+                            }
+
+                        }
                     }
                 }
             }
+            morphGrid.setAlpha(1);
+            morphGrid.repaint();
+
             morphTimer.stop();
         }
     }
 
-    private void copyTriangles(MorphGrid morphGrid){
+    private void copyTriangles(){
         for(int i=0; i<morphGrid.getGridDim(); i++) {
             for (int j = 0; j < morphGrid.getGridDim(); j++) {
                 for (int k = 0; k <= 1; k++) {
-                    inputTris[j][i][k]= new Triangle(new ControlPoint((int)morphGrid.getTriangles()[j][i][k].getV1().getX(), (int)morphGrid.getTriangles()[j][i][k].getV1().getY()), new ControlPoint((int)morphGrid.getTriangles()[j][i][k].getV2().getX(), (int)morphGrid.getTriangles()[j][i][k].getV2().getY()), new ControlPoint((int)morphGrid.getTriangles()[j][i][k].getV3().getX(), (int)morphGrid.getTriangles()[j][i][k].getV3().getY()));
+                    inputTris[j][i][k]= new Triangle(new ControlPoint((int)morphGridBefore.getTriangles()[j][i][k].getV1().getX(), (int)morphGridBefore.getTriangles()[j][i][k].getV1().getY()), new ControlPoint((int)morphGridBefore.getTriangles()[j][i][k].getV2().getX(), (int)morphGridBefore.getTriangles()[j][i][k].getV2().getY()), new ControlPoint((int)morphGridBefore.getTriangles()[j][i][k].getV3().getX(), (int)morphGridBefore.getTriangles()[j][i][k].getV3().getY()));
+                    outputTris[j][i][k]= new Triangle(new ControlPoint((int)morphGridAfter.getTriangles()[j][i][k].getV1().getX(), (int)morphGridAfter.getTriangles()[j][i][k].getV1().getY()), new ControlPoint((int)morphGridAfter.getTriangles()[j][i][k].getV2().getX(), (int)morphGridAfter.getTriangles()[j][i][k].getV2().getY()), new ControlPoint((int)morphGridAfter.getTriangles()[j][i][k].getV3().getX(), (int)morphGridAfter.getTriangles()[j][i][k].getV3().getY()));
+
                 }
             }
         }
+
     }
 
     private void addActionListeners(MorphView morphView){
@@ -516,24 +521,27 @@ public class MorphController{
         morphButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                for(int i=0; i<gridDim; i++){
-//                    for(int j=0; j<gridDim; j++){
-//                        for(int k=0; k<=1; k++){
-//                            morphTools.warpTriangle(inputImageMorph, outputImageMorph, morphGrid.getTriangles()[i][j][k], morphGridAfter.getTriangles()[i][j][k], null, null);
-//                        }
-//                    }
-//                }
                 morphFrameCount = 0;
+                ColorModel cm = inputImageMorph.getColorModel();
+                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                WritableRaster raster = inputImageMorph.copyData(null);
+                tweenImageInput = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                ColorModel cm2 = outputImageMorph.getColorModel();
+                boolean isAlphaPremultiplied2 = cm2.isAlphaPremultiplied();
+                WritableRaster raster2 = outputImageMorph.copyData(null);
+                tweenImageOutput = new BufferedImage(cm2, raster2, isAlphaPremultiplied2, null);
                 morphFrame.getContentPane().removeAll();
                 morphGrid = new MorphGrid(MorphController.this.morphGridBefore);
+                morphGrid.setOutputImage(outputImageMorph);
                 morphFrame.getContentPane().add(morphGrid);
                 morphFrame.getContentPane().add(morphButton);
                 calcSteps(frames, morphGrid);
-                calcStepsRGB(frames, morphGridBefore.getImage(), morphGridAfter.getImage());
                 morphGrid.repaint();
                 morphGrid.revalidate();
                 morphGrid.setVisible(true);
-                copyTriangles(morphGridBefore);
+                alpha = 0;
+                morphGrid.setAlpha(0);
+                copyTriangles();
                 morphTimer.start();
             }
         });
@@ -551,28 +559,7 @@ public class MorphController{
         }
     }
 
-    //inspired by http://www.informit.com/articles/article.aspx?p=1245201
-    private void calcStepsRGB(int frames, BufferedImage inputImage, BufferedImage outputImage){
-        for(int y=0; y<inputImage.getHeight(); y++){
-            for(int x=0; x<inputImage.getWidth(); x++){
-                int inputRGB = inputImage.getRGB(x,y);
-                Color inputColor = new Color(inputRGB);
-                int outputRGB = outputImage.getRGB(x,y);
-                Color outputColor = new Color(outputRGB);
-                int inputR = inputColor.getRed();
-                int inputG = inputColor.getGreen();
-                int inputB = inputColor.getBlue();
 
-                int outputR = outputColor.getRed();
-                int outputG = outputColor.getGreen();
-                int outputB = outputColor.getBlue();
-
-                stepsR[x][y] = ((float)outputR - (float)inputR)/frames;
-                stepsG[x][y] = ((float)outputG - (float)inputG)/frames;
-                stepsB[x][y] = ((float)outputB - (float)inputB)/frames;
-            }
-        }
-    }
 
     //sets up and starts the animation
     //every time preview morph button is clicked grid will start back at original positions of preview grid
@@ -606,9 +593,11 @@ public class MorphController{
         try {
             inputImage = ImageIO.read(new File("spoon.jpg"));
             inputImageMorph = ImageIO.read(new File("spoon.jpg"));
-            tweenImage = ImageIO.read(new File("spoon.jpg"));
+            tweenImageInput = ImageIO.read(new File("spoon.jpg"));
             outputImage = ImageIO.read(new File("spoon2.jpg"));
             outputImageMorph = ImageIO.read(new File("spoon2.jpg"));
+            tweenImageOutput = ImageIO.read(new File("spoon2.jpg"));
+
             morphGridBefore.setImage(inputImage);
             morphGridAfter.setImage(outputImage);
         }
@@ -620,15 +609,11 @@ public class MorphController{
         stepsX = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
         stepsY = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
 
-        stepsR = new double[inputImage.getWidth()][inputImage.getHeight()];
-        stepsG = new double[inputImage.getWidth()][inputImage.getHeight()];
-        stepsB = new double[inputImage.getWidth()][inputImage.getHeight()];
-
-
         gridDim = morphView.getGridResSlider().getValue();
 
         morphTools = new MorphTools();
         inputTris = new Triangle[gridDim+1][gridDim+1][2];
+        outputTris = new Triangle[gridDim+1][gridDim+1][2];
 
         morphGridBefore.setImage(inputImage);
         morphGridAfter.setImage(outputImage);
