@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.awt.image.ColorModel;
+import java.io.File;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
+
 
 public class MorphGrid extends JPanel {
     private int gridDim; //number of control points in each row and col
@@ -17,7 +22,10 @@ public class MorphGrid extends JPanel {
     private Triangle triangles[][][]; //array for triangles indicating row, col, and upper or lower triangle
     private BufferedImage image;
     private BufferedImage outputImage;
+    private Boolean isMorphing;
     private float alpha;
+    private int tweenCount;
+    private Boolean isMorphGrid;
 
 
     //create gridDim*gridDim control points with positions spaced equally apart in panel
@@ -131,6 +139,9 @@ public class MorphGrid extends JPanel {
         outputImage = null;
         alpha=0;
         setUpGrid(gridDim);
+        isMorphing =false;
+        tweenCount = 0;
+        isMorphGrid = false;
     }
 
     //DEEP COPY CONSTRUCTOR
@@ -167,6 +178,9 @@ public class MorphGrid extends JPanel {
         this.pointDragged = toCopy.pointDragged;
         isCopy=true;
         this.alpha=0;
+        this.isMorphing = false;
+        this.tweenCount = 0;
+        isMorphGrid = false;
     }
 
     //paints triangles and control points in panel
@@ -175,44 +189,78 @@ public class MorphGrid extends JPanel {
         g.setColor(Color.BLACK);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(Color.BLACK);
+
+        //https://stackoverflow.com/questions/11552092/changing-image-opacity
         if(outputImage!=null) {
             if(alpha<=1) {
-                g2.setComposite(AlphaComposite.SrcOver.derive(alpha));
+                g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
             }
-            ((Graphics2D) g).drawImage(outputImage, 0, 0, this);
+            g2.drawImage(outputImage, 0, 0, this);
         }
         if(alpha>=0) {
-            g2.setComposite(AlphaComposite.SrcOver.derive((float) 1 - alpha));
+            g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float)1-alpha));
         }
-        ((Graphics2D) g).drawImage(image, 0, 0, this);
+        g2.drawImage(image, 0, 0, this);
 
-        g2.setComposite(AlphaComposite.SrcOver.derive((float)1));
+        g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1));
 
-        for(int i=0; i<this.gridDim-1; i++){
-            for(int j=0; j<this.gridDim-1; j++){
-                if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
-                    g2.setColor(Color.RED);
-                    g2.fill(controlPoints[j][i].getShape());
-                    g2.setColor(Color.BLACK);
+
+        if(isMorphGrid) {
+            if (isMorphing) {
+                ColorModel cm = image.getColorModel();
+                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                WritableRaster raster = image.copyData(null);
+                BufferedImage compositeTween = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                Graphics2D saveMorph = compositeTween.createGraphics();
+                if (outputImage != null) {
+                    if (alpha <= 1) {
+                        saveMorph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, alpha));
+                    }
+                    saveMorph.drawImage(outputImage, 0, 0, this);
                 }
-                else if(controlPoints[j][i]==correspondingPoint && !isCopy){
-                    g2.setColor(Color.RED);
-                    g2.fill(controlPoints[j][i].getShape());
-                    g2.setColor(Color.BLACK);
+                if (alpha >= 0) {
+                    saveMorph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 1 - alpha));
                 }
-                else {
-                    g2.fill(controlPoints[j][i].getShape());
+                saveMorph.drawImage(image, 0, 0, this);
+                File file = new File("tween" + tweenCount + ".jpg");
+                try {
+                    ImageIO.write(compositeTween, "jpg", file);
+                } catch (IOException e1) {
                 }
+//            try{
+//                tweenImage = ImageIO.read(file);
+//                morphGrid.setImage(tweenImage);
+//            }
+//            catch (IOException e1){}
             }
         }
-        g.setColor(Color.BLACK);
 
-        //draw triangles as 3 point polygons with xpoints as all x points from 3 control points triangle is controlled by
-        //and y points as ypoints
-        for(int i=0; i<this.gridDim; i++){
-            for(int j=0; j<this.gridDim; j++){
-                for(int k=0; k<=1; k++) {
-                    g2.drawPolygon(triangles[j][i][k].getXPoints(), triangles[j][i][k].getYPoints(), 3);
+        else {
+            for (int i = 0; i < this.gridDim - 1; i++) {
+                for (int j = 0; j < this.gridDim - 1; j++) {
+                    if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
+                        g2.setColor(Color.RED);
+                        g2.fill(controlPoints[j][i].getShape());
+                        g2.setColor(Color.BLACK);
+                    } else if (controlPoints[j][i] == correspondingPoint && !isCopy) {
+                        g2.setColor(Color.RED);
+                        g2.fill(controlPoints[j][i].getShape());
+                        g2.setColor(Color.BLACK);
+                    } else {
+                        g2.fill(controlPoints[j][i].getShape());
+                    }
+                }
+            }
+
+            g.setColor(Color.BLACK);
+
+            //draw triangles as 3 point polygons with xpoints as all x points from 3 control points triangle is controlled by
+            //and y points as ypoints
+            for (int i = 0; i < this.gridDim; i++) {
+                for (int j = 0; j < this.gridDim; j++) {
+                    for (int k = 0; k <= 1; k++) {
+                        g2.drawPolygon(triangles[j][i][k].getXPoints(), triangles[j][i][k].getYPoints(), 3);
+                    }
                 }
             }
         }
@@ -324,6 +372,18 @@ public class MorphGrid extends JPanel {
 
     public void setAlpha(float alpha){
         this.alpha = alpha;
+    }
+
+    public void setIsMorphing(boolean isMorphing){
+        this.isMorphing = isMorphing;
+    }
+
+    public void setTweenCount(int tweenCount){
+        this.tweenCount = tweenCount;
+    }
+
+    public void setIsMorphGrid(boolean isMorphGrid){
+        this.isMorphGrid = isMorphGrid;
     }
 
 }
