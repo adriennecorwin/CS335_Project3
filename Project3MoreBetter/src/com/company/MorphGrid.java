@@ -225,20 +225,28 @@ public class MorphGrid extends JPanel {
                     saveMorph.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, (float) 1 - alpha));
                 }
                 saveMorph.drawImage(image, 0, 0, this);
-                File file = new File("tween" + tweenCount + ".jpg");
+                String name = "tween" + tweenCount + ".jpeg";
+                File outputfile = new File(name);
                 try {
-                    if(tweenCount==0){
-                        ImageIO.write(image, "jpg", file);
-                    }
-                    else if(tweenCount==maxFrames){
-                        ImageIO.write(outputImage, "jpg", file);
-
-                    }
-                    else {
-                        ImageIO.write(compositeTween, "jpg", file);
-                    }
-                } catch (IOException e1) {
+                    ImageIO.write(compositeTween, "jpeg", outputfile);
+                } catch (IOException e){
+                    e.printStackTrace();
                 }
+//                File file = new File(name);
+////                try {
+////                    if(tweenCount==0){
+////                        ImageIO.write(image, "jpeg", file);
+////                    }
+////                    else if(tweenCount==maxFrames){
+////                        ImageIO.write(outputImage, "jpeg", file);
+////
+////                    }
+////                    else {
+////                        ImageIO.write(compositeTween, "jpeg", file);
+////                    }
+////                } catch (IOException e1) {
+////                }
+
             }
         }
 

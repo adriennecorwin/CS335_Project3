@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import java.awt.image.RescaleOp;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -374,7 +373,12 @@ public class MorphController{
                 if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
                     Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
                     inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                    inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+
                     Graphics2D g2 = inputImage.createGraphics();
+                    g2.drawImage(tmp, 0, 0, null);
+                    g2.dispose();
+                    g2 = inputImageMorph.createGraphics();
                     g2.drawImage(tmp, 0, 0, null);
                     g2.dispose();
                     morphGridBefore.setImage(inputImage);
@@ -383,7 +387,11 @@ public class MorphController{
                 if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
                     Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
                     outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                    outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
                     Graphics2D g2 = outputImage.createGraphics();
+                    g2.drawImage(tmp, 0, 0, null);
+                    g2.dispose();
+                    g2 = outputImageMorph.createGraphics();
                     g2.drawImage(tmp, 0, 0, null);
                     g2.dispose();
                     morphGridBefore.setOutputImage(outputImage);
@@ -465,6 +473,9 @@ public class MorphController{
                             inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
                             inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
                             Graphics2D g2 = inputImage.createGraphics();
+                            g2.drawImage(tmp, 0, 0, null);
+                            g2.dispose();
+                            g2 = inputImageMorph.createGraphics();
                             g2.drawImage(tmp, 0, 0, null);
                             g2.dispose();
                             morphGridBefore.setImage(inputImage);
@@ -737,7 +748,11 @@ public class MorphController{
         if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
             Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
             inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+            inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = inputImage.createGraphics();
+            g2.drawImage(tmp, 0, 0, null);
+            g2.dispose();
+            g2 = inputImageMorph.createGraphics();
             g2.drawImage(tmp, 0, 0, null);
             g2.dispose();
             morphGridBefore.setImage(inputImage);
@@ -746,10 +761,15 @@ public class MorphController{
         if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
             Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
             outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+            outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
             Graphics2D g2 = outputImage.createGraphics();
             g2.drawImage(tmp, 0, 0, null);
             g2.dispose();
+            g2 = outputImageMorph.createGraphics();
+            g2.drawImage(tmp, 0, 0, null);
+            g2.dispose();
             morphGridBefore.setOutputImage(outputImage);
+            morphGridAfter.setImage(outputImage);
         }
         morphGridBefore.setPointDragged(pointDragged);
         morphGridAfter.setPointDragged(pointDragged);
