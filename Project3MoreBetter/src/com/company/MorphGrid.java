@@ -99,20 +99,20 @@ public class MorphGrid extends JPanel {
             if(i==0){
                 triangles[0][i][0] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(0, borderY + spacing)), controlPoints[0][i]);
                 triangles[0][i][1] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(spacing, borderY)), controlPoints[0][i]);
-                triangles[this.gridDim-1][i][0] = new Triangle(new ControlPoint(new Point(panelSize-spacing, borderY)), controlPoints[this.gridDim-2][i], new ControlPoint(new Point(panelSize, borderY+spacing)));
-                triangles[this.gridDim-1][i][1] = new Triangle(new ControlPoint(new Point(panelSize-spacing, borderY)), new ControlPoint(new Point(panelSize, borderY)), new ControlPoint(new Point(panelSize, borderY+spacing)));
+                triangles[this.gridDim-1][i][0] = new Triangle(new ControlPoint(new Point(spacing*(this.getGridDim()-1), borderY)), controlPoints[this.gridDim-2][i], new ControlPoint(new Point(spacing*this.getGridDim(), borderY+spacing)));
+                triangles[this.gridDim-1][i][1] = new Triangle(new ControlPoint(new Point(spacing*(this.getGridDim()-1), borderY)), new ControlPoint(new Point(spacing*this.getGridDim(), borderY)), new ControlPoint(new Point(spacing*this.getGridDim(), borderY+spacing)));
             }
             else if(i<this.gridDim-1) {
                 triangles[0][i][0] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(0, borderY + spacing)), controlPoints[0][i]);
                 triangles[0][i][1] = new Triangle(new ControlPoint(new Point(0, borderY)), controlPoints[0][i-1], controlPoints[0][i]);
-                triangles[this.gridDim-1][i][0] = new Triangle(controlPoints[this.gridDim-2][i-1], controlPoints[this.gridDim-2][i], new ControlPoint(new Point(panelSize, borderY+spacing)));
-                triangles[this.gridDim-1][i][1] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(panelSize, borderY)), new ControlPoint(new Point(panelSize, borderY+spacing)));
+                triangles[this.gridDim-1][i][0] = new Triangle(controlPoints[this.gridDim-2][i-1], controlPoints[this.gridDim-2][i], new ControlPoint(new Point(spacing*this.getGridDim(), borderY+spacing)));
+                triangles[this.gridDim-1][i][1] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(spacing*this.getGridDim(), borderY)), new ControlPoint(new Point(spacing*this.getGridDim(), borderY+spacing)));
             }
             else{
-                triangles[0][i][0] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(0, panelSize)), new ControlPoint(new Point(spacing, panelSize)));
-                triangles[0][i][1] = new Triangle(new ControlPoint(new Point(0, borderY)), controlPoints[0][i-1], new ControlPoint(new Point(spacing, panelSize)));
-                triangles[this.gridDim-1][i][0] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(borderY, panelSize)), new ControlPoint(new Point(panelSize, panelSize)));
-                triangles[this.gridDim-1][i][1] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(panelSize, borderY)), new ControlPoint(new Point(panelSize, panelSize)));
+                triangles[0][i][0] = new Triangle(new ControlPoint(new Point(0, borderY)), new ControlPoint(new Point(0, spacing*this.getGridDim())), new ControlPoint(new Point(spacing, spacing*this.getGridDim())));
+                triangles[0][i][1] = new Triangle(new ControlPoint(new Point(0, borderY)), controlPoints[0][i-1], new ControlPoint(new Point(spacing, spacing*this.getGridDim())));
+                triangles[this.gridDim-1][i][0] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(borderY, spacing*this.getGridDim())), new ControlPoint(new Point(spacing*this.getGridDim(), spacing*this.getGridDim())));
+                triangles[this.gridDim-1][i][1] = new Triangle(controlPoints[this.gridDim-2][i-1], new ControlPoint(new Point(spacing*this.getGridDim(), borderY)), new ControlPoint(new Point(spacing*this.getGridDim(), spacing*this.getGridDim())));
             }
             borderY+=spacing;
         }
@@ -123,8 +123,8 @@ public class MorphGrid extends JPanel {
         for(int i=1; i<this.gridDim-1; i++){
             triangles[i][0][0] = new Triangle(new ControlPoint(new Point(borderX, 0)), controlPoints[i-1][0], controlPoints[i][0]);
             triangles[i][0][1] = new Triangle(new ControlPoint(new Point(borderX, 0)), new ControlPoint(new Point(borderX+spacing, 0)), controlPoints[i][0]);
-            triangles[i][this.gridDim-1][0] = new Triangle(controlPoints[i-1][this.gridDim-2], new ControlPoint(new Point(borderX, panelSize)), new ControlPoint(new Point(borderX+spacing, panelSize)));
-            triangles[i][this.gridDim-1][1] = new Triangle(controlPoints[i-1][this.gridDim-2], controlPoints[i][this.gridDim-2], new ControlPoint(new Point(borderX+spacing, panelSize)));
+            triangles[i][this.gridDim-1][0] = new Triangle(controlPoints[i-1][this.gridDim-2], new ControlPoint(new Point(borderX, spacing*this.getGridDim())), new ControlPoint(new Point(borderX+spacing, spacing*this.getGridDim())));
+            triangles[i][this.gridDim-1][1] = new Triangle(controlPoints[i-1][this.gridDim-2], controlPoints[i][this.gridDim-2], new ControlPoint(new Point(borderX+spacing, spacing*this.getGridDim())));
             borderX+=spacing;
         }
     }
@@ -384,6 +384,10 @@ public class MorphGrid extends JPanel {
 
     public void setIsMorphGrid(boolean isMorphGrid){
         this.isMorphGrid = isMorphGrid;
+    }
+
+    public int getPanelDim(){
+        return spacing*this.gridDim;
     }
 
 }

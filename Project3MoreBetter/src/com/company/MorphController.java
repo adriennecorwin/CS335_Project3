@@ -205,8 +205,8 @@ public class MorphController{
             for(int i=0; i<morphGrid.getGridDim(); i++) {
                 for (int j = 0; j < morphGrid.getGridDim(); j++) {
                     for (int k = 0; k <= 1; k++) {
-                        if (inputTris[j][i][k] != null) {
-                            if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
+//                        if (inputTris[j][i][k] != null) {
+//                            if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
                                 MorphTools.warpTriangle(inputImageMorph, tweenImageInput, inputTris[j][i][k], morphGrid.getTriangles()[j][i][k], null, null);
                                 MorphTools.warpTriangle(outputImageMorph, tweenImageOutput, outputTris[j][i][1-k], morphGrid.getTriangles()[j][i][1-k], null, null);
                                 morphGrid.setImage(tweenImageInput);
@@ -214,8 +214,8 @@ public class MorphController{
                                 morphGrid.repaint();
                             }
 
-                        }
-                    }
+//                        }
+//                    }
                 }
             }
         }
@@ -358,6 +358,24 @@ public class MorphController{
                 gridDim = morphView.getGridResSlider().getValue();
                 morphGridBefore.setUpGrid(gridDim);
                 morphGridAfter.setUpGrid(gridDim);
+                if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
+                    Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
+                    inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g2 = inputImage.createGraphics();
+                    g2.drawImage(tmp, 0, 0, null);
+                    g2.dispose();
+                    morphGridBefore.setImage(inputImage);
+                }
+
+                if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
+                    Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
+                    outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g2 = outputImage.createGraphics();
+                    g2.drawImage(tmp, 0, 0, null);
+                    g2.dispose();
+                    morphGridBefore.setOutputImage(outputImage);
+                    morphGridAfter.setImage(outputImage);
+                }
                 morphGridBefore.revalidate();
                 morphGridAfter.revalidate();
                 morphView.getGridResLabel().setText("Grid Resolution: "+morphView.getGridResSlider().getValue()+"x"+morphView.getGridResSlider().getValue());
@@ -428,7 +446,17 @@ public class MorphController{
                     try {
                         inputImage = ImageIO.read(file);
                         inputImageMorph = ImageIO.read(file);
+                        tweenImageInput = ImageIO.read(file);
+                        if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
+                            Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
+                            inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                            Graphics2D g2 = inputImage.createGraphics();
+                            g2.drawImage(tmp, 0, 0, null);
+                            g2.dispose();
+                            morphGridBefore.setImage(inputImage);
+                        }
                         morphGridBefore.setImage(inputImage);
+
                     } catch (IOException e1){}
                 }
             }
@@ -443,6 +471,16 @@ public class MorphController{
                     try {
                         outputImage = ImageIO.read(file);
                         outputImageMorph = ImageIO.read(file);
+                        tweenImageOutput = ImageIO.read(file);
+                        if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
+                            Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
+                            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                            Graphics2D g2 = outputImage.createGraphics();
+                            g2.drawImage(tmp, 0, 0, null);
+                            g2.dispose();
+                            morphGridBefore.setOutputImage(outputImage);
+                            morphGridAfter.setImage(outputImage);
+                        }
                         morphGridAfter.setImage(outputImage);
                     } catch (IOException e1){}
                 }
@@ -461,15 +499,15 @@ public class MorphController{
         morphView.getInputIntensitySlider().addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                BufferedImage inputImageCopy;
-                ColorModel cm = inputImage.getColorModel();
-                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-                WritableRaster raster = inputImage.copyData(null);
-                inputImageCopy = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+//                BufferedImage inputImageCopy;
+//                ColorModel cm = inputImage.getColorModel();
+//                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+//                WritableRaster raster = inputImage.copyData(null);
+//                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 inputIntensity = morphView.getInputIntensitySlider().getValue();
                 RescaleOp rescaleOp = new RescaleOp(inputIntensity/(float)100, 0, null);
-                inputImage = rescaleOp.filter(inputImageCopy, null);
-                morphGridBefore.setImage(inputImageCopy);
+                inputImage = rescaleOp.filter(inputImageMorph, inputImageMorph);
+                morphGridBefore.setImage(inputImageMorph);
             }
         });
 
@@ -586,9 +624,6 @@ public class MorphController{
         frames = morphView.getMorphFrameSlider().getValue();
         this.morphGridBefore = morphGridBefore;
         this.morphGridAfter = morphGridAfter;
-        morphGridBefore.setPointDragged(pointDragged);
-        morphGridAfter.setPointDragged(pointDragged);
-
         try {
             inputImage = ImageIO.read(new File("spoon.jpg"));
             inputImageMorph = ImageIO.read(new File("spoon.jpg"));
@@ -601,6 +636,26 @@ public class MorphController{
             morphGridAfter.setImage(outputImage);
         }
         catch (IOException e1){}
+
+        if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
+            Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
+            inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = inputImage.createGraphics();
+            g2.drawImage(tmp, 0, 0, null);
+            g2.dispose();
+            morphGridBefore.setImage(inputImage);
+        }
+
+        if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
+            Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
+            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g2 = outputImage.createGraphics();
+            g2.drawImage(tmp, 0, 0, null);
+            g2.dispose();
+            morphGridBefore.setOutputImage(outputImage);
+        }
+        morphGridBefore.setPointDragged(pointDragged);
+        morphGridAfter.setPointDragged(pointDragged);
 
         //make deep copy of before grid for preview animation frame
         previewMorphGrid = new MorphGrid(MorphController.this.morphGridBefore);
