@@ -26,6 +26,7 @@ public class MorphGrid extends JPanel {
     private float alpha;
     private int tweenCount;
     private Boolean isMorphGrid;
+    private int maxFrames;
 
 
     //create gridDim*gridDim control points with positions spaced equally apart in panel
@@ -142,6 +143,7 @@ public class MorphGrid extends JPanel {
         isMorphing =false;
         tweenCount = 0;
         isMorphGrid = false;
+        maxFrames = 0;
     }
 
     //DEEP COPY CONSTRUCTOR
@@ -181,14 +183,15 @@ public class MorphGrid extends JPanel {
         this.isMorphing = false;
         this.tweenCount = 0;
         isMorphGrid = false;
+        maxFrames = 0;
     }
 
     //paints triangles and control points in panel
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
+        g.setColor(Color.GRAY);
         Graphics2D g2 = (Graphics2D) g;
-        g2.setColor(Color.BLACK);
+        g2.setColor(Color.GRAY);
 
         //https://stackoverflow.com/questions/11552092/changing-image-opacity
         if(outputImage!=null) {
@@ -224,14 +227,18 @@ public class MorphGrid extends JPanel {
                 saveMorph.drawImage(image, 0, 0, this);
                 File file = new File("tween" + tweenCount + ".jpg");
                 try {
-                    ImageIO.write(compositeTween, "jpg", file);
+                    if(tweenCount==0){
+                        ImageIO.write(image, "jpg", file);
+                    }
+                    else if(tweenCount==maxFrames){
+                        ImageIO.write(outputImage, "jpg", file);
+
+                    }
+                    else {
+                        ImageIO.write(compositeTween, "jpg", file);
+                    }
                 } catch (IOException e1) {
                 }
-//            try{
-//                tweenImage = ImageIO.read(file);
-//                morphGrid.setImage(tweenImage);
-//            }
-//            catch (IOException e1){}
             }
         }
 
@@ -241,18 +248,18 @@ public class MorphGrid extends JPanel {
                     if (pointDragged[0] == j && pointDragged[1] == i && !isCopy) {
                         g2.setColor(Color.RED);
                         g2.fill(controlPoints[j][i].getShape());
-                        g2.setColor(Color.BLACK);
+                        g2.setColor(Color.GRAY);
                     } else if (controlPoints[j][i] == correspondingPoint && !isCopy) {
                         g2.setColor(Color.RED);
                         g2.fill(controlPoints[j][i].getShape());
-                        g2.setColor(Color.BLACK);
+                        g2.setColor(Color.GRAY);
                     } else {
                         g2.fill(controlPoints[j][i].getShape());
                     }
                 }
             }
 
-            g.setColor(Color.BLACK);
+            g.setColor(Color.GRAY);
 
             //draw triangles as 3 point polygons with xpoints as all x points from 3 control points triangle is controlled by
             //and y points as ypoints
@@ -309,12 +316,10 @@ public class MorphGrid extends JPanel {
     //(need row and col instead of control point bc the control point's position will change but its row and col pos in array won't
     //so this ensures we update same control point even when it has different x, y position)
     //update that vertex to new position and redraw triangle
-    public Triangle[][][] updateTrianglePreview(int row, int col, ControlPoint after){
-        Triangle inputTris[][][] = new Triangle[gridDim][gridDim][2];
+    public void updateTrianglePreview(int row, int col, ControlPoint after){
         for(int i=0; i<gridDim; i++) {
             for (int j = 0; j < gridDim; j++) {
                 for (int k = 0; k <= 1; k++) {
-                    inputTris[j][i][k] = new Triangle(triangles[j][i][k].getV1(), triangles[j][i][k].getV2(), triangles[j][i][k].getV3());
                     if (triangles[j][i][k].controlledBy(row, col) == 1) {
                         triangles[j][i][k].setControlPoint(1, after);
                     }
@@ -328,7 +333,6 @@ public class MorphGrid extends JPanel {
             }
         }
         repaint();
-        return inputTris;
     }
 
 
@@ -344,6 +348,11 @@ public class MorphGrid extends JPanel {
     public int getGridDim(){
         return gridDim;
     }
+
+    public void setGridDim(int gridDim){
+        this.gridDim = gridDim+1;
+    }
+
 
     public ControlPoint[][] getControlPoints(){
         return controlPoints;
@@ -388,6 +397,10 @@ public class MorphGrid extends JPanel {
 
     public int getPanelDim(){
         return spacing*this.gridDim;
+    }
+
+    public void setMaxFrames(int maxFrames){
+        this.maxFrames = maxFrames;
     }
 
 }

@@ -44,8 +44,6 @@ public class MorphController{
     private Triangle inputTris[][][];
     private Triangle outputTris[][][];
     private float alpha;
-    private File outputFile;
-
     private float inputIntensity;
     private float outputIntensity;
 
@@ -206,15 +204,15 @@ public class MorphController{
                 for (int j = 0; j < morphGrid.getGridDim(); j++) {
                     for (int k = 0; k <= 1; k++) {
 //                        if (inputTris[j][i][k] != null) {
-//                            if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
+                            if (inputTris[j][i][k].getV1().getX() != morphGrid.getTriangles()[j][i][k].getV1().getX() || inputTris[j][i][k].getV2().getX() != morphGrid.getTriangles()[j][i][k].getV2().getX() || inputTris[j][i][k].getV3().getX() != morphGrid.getTriangles()[j][i][k].getV3().getX() || inputTris[j][i][k].getV1().getY() != morphGrid.getTriangles()[j][i][k].getV1().getY() || inputTris[j][i][k].getV2().getY() != morphGrid.getTriangles()[j][i][k].getV2().getY() || inputTris[j][i][k].getV3().getY() != morphGrid.getTriangles()[j][i][k].getV3().getY()) {
                                 MorphTools.warpTriangle(inputImageMorph, tweenImageInput, inputTris[j][i][k], morphGrid.getTriangles()[j][i][k], null, null);
-                                MorphTools.warpTriangle(outputImageMorph, tweenImageOutput, outputTris[j][i][1-k], morphGrid.getTriangles()[j][i][1-k], null, null);
+                                MorphTools.warpTriangle(outputImageMorph, tweenImageOutput, outputTris[j][i][k], morphGrid.getTriangles()[j][i][k], null, null);
                                 morphGrid.setImage(tweenImageInput);
                                 morphGrid.setOutputImage(tweenImageOutput);
                                 morphGrid.repaint();
                             }
 
-//                        }
+                        }
 //                    }
                 }
             }
@@ -349,6 +347,16 @@ public class MorphController{
             public void actionPerformed(ActionEvent e) {
                 morphGridBefore.setUpGrid(gridDim);
                 morphGridAfter.setUpGrid(gridDim);
+                ColorModel cm = inputImage.getColorModel();
+                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                WritableRaster raster = inputImage.copyData(null);
+                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                morphGridBefore.setImage(inputImageMorph);
+                cm = outputImage.getColorModel();
+                isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                raster = outputImage.copyData(null);
+                outputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                morphGridAfter.setImage(outputImage);
             }
         });
 
@@ -358,6 +366,11 @@ public class MorphController{
                 gridDim = morphView.getGridResSlider().getValue();
                 morphGridBefore.setUpGrid(gridDim);
                 morphGridAfter.setUpGrid(gridDim);
+                inputTris = new Triangle[morphView.getGridResSlider().getValue()+1][morphView.getGridResSlider().getValue()+1][2];
+                outputTris = new Triangle[morphView.getGridResSlider().getValue()+1][morphView.getGridResSlider().getValue()+1][2];
+                previewMorphGrid = new MorphGrid(morphGridBefore);
+                stepsX = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
+                stepsY = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
                 if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
                     Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
                     inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
@@ -399,7 +412,7 @@ public class MorphController{
                         movePoints();
                     }
                 });
-                previewTimer.start();
+//                previewTimer.start();
                 morphTimer = new Timer(delay/frames, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -418,7 +431,7 @@ public class MorphController{
                 previewTimer.stop();
                 morphTimer.stop();
                 frames = morphView.getMorphFrameSlider().getValue();
-                morphView.getMorphFrameLabel().setText("Frames Per Second: "+frames);
+                morphView.getMorphFrameLabel().setText("Number of Tween Frames: "+frames);
                 calcSteps(frames, previewMorphGrid);
                 previewTimer = new Timer(delay/frames, new ActionListener() {
                     @Override
@@ -426,7 +439,7 @@ public class MorphController{
                         movePoints();
                     }
                 });
-                previewTimer.start();
+//                previewTimer.start();
                 morphTimer = new Timer(delay/frames, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -450,6 +463,7 @@ public class MorphController{
                         if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
                             Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
                             inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                            inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
                             Graphics2D g2 = inputImage.createGraphics();
                             g2.drawImage(tmp, 0, 0, null);
                             g2.dispose();
@@ -475,6 +489,7 @@ public class MorphController{
                         if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
                             Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
                             outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                            outputImageMorph =  new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
                             Graphics2D g2 = outputImage.createGraphics();
                             g2.drawImage(tmp, 0, 0, null);
                             g2.dispose();
@@ -499,25 +514,107 @@ public class MorphController{
         morphView.getInputIntensitySlider().addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-//                BufferedImage inputImageCopy;
-//                ColorModel cm = inputImage.getColorModel();
-//                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//                WritableRaster raster = inputImage.copyData(null);
-//                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                int outputRed;
+                int outputGreen;
+                int outputBlue;
+                ColorModel cm = inputImage.getColorModel();
+                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                WritableRaster raster = inputImage.copyData(null);
+                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 inputIntensity = morphView.getInputIntensitySlider().getValue();
-                RescaleOp rescaleOp = new RescaleOp(inputIntensity/(float)100, 0, null);
-                inputImage = rescaleOp.filter(inputImageMorph, inputImageMorph);
-                morphGridBefore.setImage(inputImageMorph);
+
+                for(int y=0; y<inputImageMorph.getHeight(); y++){
+                    for(int x=0; x<inputImageMorph.getWidth(); x++){
+                        Color inputColor = new Color(inputImage.getRGB(x, y));
+                        if(inputColor.getRed()+inputIntensity>255){
+                            outputRed=255;
+                        }
+                        else if(inputColor.getRed()+inputIntensity<0){
+                            outputRed=0;
+                        }
+                        else{
+                            outputRed=(int)(inputColor.getRed()+inputIntensity);
+                        }
+                        if(inputColor.getGreen()+inputIntensity>255){
+                            outputGreen=255;
+                        }
+                        else if(inputColor.getGreen()+inputIntensity<0){
+                            outputGreen=0;
+                        }
+
+                        else{
+                            outputGreen=(int)(inputColor.getGreen()+inputIntensity);
+                        }
+                        if(inputColor.getBlue()+inputIntensity>255){
+                            outputBlue=255;
+                        }
+                        else if(inputColor.getBlue()+inputIntensity<0){
+                            outputBlue=0;
+                        }
+
+                        else{
+                            outputBlue=(int)(inputColor.getBlue()+inputIntensity);
+                        }
+
+                        Color outputColor = new Color(outputRed, outputGreen, outputBlue);
+                        inputImageMorph.setRGB(x, y, outputColor.getRGB());
+                        morphGridBefore.setImage(inputImageMorph);
+                    }
+                }
+
             }
         });
 
         morphView.getOutputIntensitySlider().addChangeListener(new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
+                int outputRed;
+                int outputGreen;
+                int outputBlue;
+                ColorModel cm = outputImage.getColorModel();
+                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+                WritableRaster raster = outputImage.copyData(null);
+                outputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 outputIntensity = morphView.getOutputIntensitySlider().getValue();
-                RescaleOp rescaleOp = new RescaleOp(outputIntensity/100, 0, null);
-                outputImage = rescaleOp.filter(outputImage, outputImage);
-                morphGridAfter.setImage(outputImage);
+
+                for(int y=0; y<outputImageMorph.getHeight(); y++){
+                    for(int x=0; x<outputImageMorph.getWidth(); x++){
+                        Color inputColor = new Color(outputImage.getRGB(x, y));
+                        if(inputColor.getRed()+outputIntensity>255){
+                            outputRed=255;
+                        }
+                        else if(inputColor.getRed()+outputIntensity<0){
+                            outputRed=0;
+                        }
+                        else{
+                            outputRed=(int)(inputColor.getRed()+outputIntensity);
+                        }
+                        if(inputColor.getGreen()+outputIntensity>255){
+                            outputGreen=255;
+                        }
+                        else if(inputColor.getGreen()+outputIntensity<0){
+                            outputGreen=0;
+                        }
+
+                        else{
+                            outputGreen=(int)(inputColor.getGreen()+outputIntensity);
+                        }
+                        if(inputColor.getBlue()+outputIntensity>255){
+                            outputBlue=255;
+                        }
+                        else if(inputColor.getBlue()+outputIntensity<0){
+                            outputBlue=0;
+                        }
+
+                        else{
+                            outputBlue=(int)(inputColor.getBlue()+outputIntensity);
+                        }
+
+                        Color outputColor = new Color(outputRed, outputGreen, outputBlue);
+                        outputImageMorph.setRGB(x, y, outputColor.getRGB());
+                        morphGridAfter.setImage(outputImageMorph);
+                    }
+                }
             }
         });
 
@@ -575,6 +672,7 @@ public class MorphController{
                 morphGrid.repaint();
                 morphGrid.revalidate();
                 morphGrid.setVisible(true);
+                morphGrid.setMaxFrames(frames);
                 alpha = 0;
                 copyTriangles();
                 morphGrid.setIsMorphing(true);
@@ -595,7 +693,6 @@ public class MorphController{
             }
         }
     }
-
 
 
     //sets up and starts the animation
@@ -625,12 +722,12 @@ public class MorphController{
         this.morphGridBefore = morphGridBefore;
         this.morphGridAfter = morphGridAfter;
         try {
-            inputImage = ImageIO.read(new File("spoon.jpg"));
-            inputImageMorph = ImageIO.read(new File("spoon.jpg"));
-            tweenImageInput = ImageIO.read(new File("spoon.jpg"));
-            outputImage = ImageIO.read(new File("spoon2.jpg"));
-            outputImageMorph = ImageIO.read(new File("spoon2.jpg"));
-            tweenImageOutput = ImageIO.read(new File("spoon2.jpg"));
+            inputImage = ImageIO.read(new File("Lawrence.jpg"));
+            inputImageMorph = ImageIO.read(new File("Lawrence.jpg"));
+            tweenImageInput = ImageIO.read(new File("Lawrence.jpg"));
+            outputImage = ImageIO.read(new File("Morpheus.jpg"));
+            outputImageMorph = ImageIO.read(new File("Morpheus.jpg"));
+            tweenImageOutput = ImageIO.read(new File("Morpheus.jpg"));
 
             morphGridBefore.setImage(inputImage);
             morphGridAfter.setImage(outputImage);
@@ -674,6 +771,7 @@ public class MorphController{
         morphGridAfter.repaint();
         addActionListeners(morphView);
     }
+
 
 
 

@@ -39,8 +39,8 @@ public class MorphView extends JPanel{
         morphTimeLabel = new JLabel("Morph Duration: "+morphTimeSlider.getValue()+" seconds");
         morphFrameLabel = new JLabel("Number of Tween Frames: "+morphFrameSlider.getValue());
         morphButton = new JButton("Morph");
-        inputIntensitySlider = new JSlider(1, 200, 100);
-        outputIntensitySlider = new JSlider(1, 200, 100);
+        inputIntensitySlider = new JSlider(-255, 255, 0);
+        outputIntensitySlider = new JSlider(-255, 255, 0);
         inputIntensityLabel = new JLabel("Input Intensity");
         outputIntensityLabel = new JLabel("Output Intensity");
         fileOpenInput = new JButton("Set Input Image");
