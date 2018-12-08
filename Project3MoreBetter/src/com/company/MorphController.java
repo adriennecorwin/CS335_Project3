@@ -346,16 +346,25 @@ public class MorphController{
             public void actionPerformed(ActionEvent e) {
                 morphGridBefore.setUpGrid(gridDim);
                 morphGridAfter.setUpGrid(gridDim);
-                ColorModel cm = inputImage.getColorModel();
-                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-                WritableRaster raster = inputImage.copyData(null);
-                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+//                ColorModel cm = inputImage.getColorModel();
+//                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+//                WritableRaster raster = inputImage.copyData(null);
+//                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                inputImageMorph = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), 5);
+                Graphics2D g = inputImageMorph.createGraphics();
+                g.drawImage(inputImage, 0, 0, null);
+                g.dispose();
                 morphGridBefore.setImage(inputImageMorph);
-                cm = outputImage.getColorModel();
-                isAlphaPremultiplied = cm.isAlphaPremultiplied();
-                raster = outputImage.copyData(null);
-                outputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-                morphGridAfter.setImage(outputImage);
+
+                outputImageMorph = new BufferedImage(outputImage.getWidth(), outputImage.getHeight(), 5);
+                g = outputImageMorph.createGraphics();
+                g.drawImage(outputImage, 0, 0, null);
+                g.dispose();
+//                cm = outputImage.getColorModel();
+//                isAlphaPremultiplied = cm.isAlphaPremultiplied();
+//                raster = outputImage.copyData(null);
+//                outputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                morphGridAfter.setImage(outputImageMorph);
             }
         });
 
@@ -372,8 +381,8 @@ public class MorphController{
                 stepsY = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
                 if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
                     Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
-                    inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
-                    inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                    inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), 5);
+                    inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), 5);
 
                     Graphics2D g2 = inputImage.createGraphics();
                     g2.drawImage(tmp, 0, 0, null);
@@ -386,8 +395,8 @@ public class MorphController{
 
                 if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
                     Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
-                    outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
-                    outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                    outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
+                    outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
                     Graphics2D g2 = outputImage.createGraphics();
                     g2.drawImage(tmp, 0, 0, null);
                     g2.dispose();
@@ -470,8 +479,8 @@ public class MorphController{
                         tweenImageInput = ImageIO.read(file);
                         if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
                             Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
-                            inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
-                            inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                            inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), 5);
+                            inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), 5);
                             Graphics2D g2 = inputImage.createGraphics();
                             g2.drawImage(tmp, 0, 0, null);
                             g2.dispose();
@@ -490,6 +499,27 @@ public class MorphController{
         morphView.getFileOpenOutput().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+//                int returnVal = morphView.getFc().showOpenDialog(morphView);
+////                if (returnVal == JFileChooser.APPROVE_OPTION) {
+////                    File file = morphView.getFc().getSelectedFile();
+////                    try {
+////                        outputImage = ImageIO.read(file);
+////                        outputImageMorph = ImageIO.read(file);
+////                        tweenImageOutput = ImageIO.read(file);
+////                        if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
+////                            Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
+////                            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
+////                            outputImageMorph =  new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
+////                            Graphics2D g2 = outputImage.createGraphics();
+////                            g2.drawImage(tmp, 0, 0, null);
+////                            g2.dispose();
+////                            morphGridAfter.setImage(outputImage);
+////                        }
+////                        morphGridBefore.setOutputImage(outputImageMorph);
+////                        morphGridAfter.setImage(outputImage);
+////                        morphGridAfter.setOutputImage(outputImage);
+////                    } catch (IOException e1){}
+////                }
                 int returnVal = morphView.getFc().showOpenDialog(morphView);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = morphView.getFc().getSelectedFile();
@@ -499,15 +529,19 @@ public class MorphController{
                         tweenImageOutput = ImageIO.read(file);
                         if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
                             Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
-                            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
-                            outputImageMorph =  new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+                            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
+                            outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
                             Graphics2D g2 = outputImage.createGraphics();
                             g2.drawImage(tmp, 0, 0, null);
                             g2.dispose();
-                            morphGridBefore.setOutputImage(outputImage);
+                            g2 = outputImageMorph.createGraphics();
+                            g2.drawImage(tmp, 0, 0, null);
+                            g2.dispose();
                             morphGridAfter.setImage(outputImage);
+                            morphGridBefore.setOutputImage(outputImage);
                         }
                         morphGridAfter.setImage(outputImage);
+
                     } catch (IOException e1){}
                 }
             }
@@ -528,11 +562,12 @@ public class MorphController{
                 int outputRed;
                 int outputGreen;
                 int outputBlue;
-                ColorModel cm = inputImage.getColorModel();
-                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-                WritableRaster raster = inputImage.copyData(null);
-                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 inputIntensity = morphView.getInputIntensitySlider().getValue();
+
+                inputImageMorph = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), 5);
+                Graphics2D g = inputImageMorph.createGraphics();
+                g.drawImage(inputImage, 0, 0, null);
+                g.dispose();
 
                 for(int y=0; y<inputImageMorph.getHeight(); y++){
                     for(int x=0; x<inputImageMorph.getWidth(); x++){
@@ -582,10 +617,10 @@ public class MorphController{
                 int outputRed;
                 int outputGreen;
                 int outputBlue;
-                ColorModel cm = outputImage.getColorModel();
-                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-                WritableRaster raster = outputImage.copyData(null);
-                outputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+                outputImageMorph = new BufferedImage(outputImage.getWidth(), outputImage.getHeight(), 5);
+                Graphics2D g = outputImageMorph.createGraphics();
+                g.drawImage(outputImage, 0, 0, null);
+                g.dispose();
                 outputIntensity = morphView.getOutputIntensitySlider().getValue();
 
                 for(int y=0; y<outputImageMorph.getHeight(); y++){
@@ -664,14 +699,23 @@ public class MorphController{
             @Override
             public void actionPerformed(ActionEvent e) {
                 morphFrameCount = 0;
-                ColorModel cm = inputImageMorph.getColorModel();
-                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-                WritableRaster raster = inputImageMorph.copyData(null);
-                tweenImageInput = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-                ColorModel cm2 = outputImageMorph.getColorModel();
-                boolean isAlphaPremultiplied2 = cm2.isAlphaPremultiplied();
-                WritableRaster raster2 = outputImageMorph.copyData(null);
-                tweenImageOutput = new BufferedImage(cm2, raster2, isAlphaPremultiplied2, null);
+//                ColorModel cm = inputImageMorph.getColorModel();
+//                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
+//                WritableRaster raster = inputImageMorph.copyData(null);
+//                tweenImageInput = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
+
+                tweenImageInput = new BufferedImage(inputImageMorph.getWidth(), inputImageMorph.getHeight(), 5);
+                Graphics2D g = tweenImageInput.createGraphics();
+                g.drawImage(inputImageMorph, 0, 0, null);
+                g.dispose();
+//                ColorModel cm2 = outputImageMorph.getColorModel();
+//                boolean isAlphaPremultiplied2 = cm2.isAlphaPremultiplied();
+//                WritableRaster raster2 = outputImageMorph.copyData(null);
+//                tweenImageOutput = new BufferedImage(cm2, raster2, isAlphaPremultiplied2, null);
+                tweenImageOutput = new BufferedImage(outputImageMorph.getWidth(), outputImageMorph.getHeight(), 5);
+                g = tweenImageOutput.createGraphics();
+                g.drawImage(outputImageMorph, 0, 0, null);
+                g.dispose();
                 morphFrame.getContentPane().removeAll();
                 morphGrid = new MorphGrid(MorphController.this.morphGridBefore);
                 morphGrid.setIsMorphGrid(true);
@@ -747,8 +791,8 @@ public class MorphController{
 
         if(inputImage.getHeight()-morphGridBefore.getPanelDim()!=0 || inputImage.getWidth()-morphGridBefore.getPanelDim()!=0){
             Image tmp = inputImage.getScaledInstance(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), Image.SCALE_SMOOTH);
-            inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
-            inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+            inputImage = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), 5);
+            inputImageMorph = new BufferedImage(morphGridBefore.getPanelDim(), morphGridBefore.getPanelDim(), 5);
             Graphics2D g2 = inputImage.createGraphics();
             g2.drawImage(tmp, 0, 0, null);
             g2.dispose();
@@ -760,8 +804,8 @@ public class MorphController{
 
         if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
             Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
-            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
-            outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), BufferedImage.TYPE_INT_ARGB);
+            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
+            outputImageMorph = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
             Graphics2D g2 = outputImage.createGraphics();
             g2.drawImage(tmp, 0, 0, null);
             g2.dispose();
@@ -776,6 +820,7 @@ public class MorphController{
 
         //make deep copy of before grid for preview animation frame
         previewMorphGrid = new MorphGrid(MorphController.this.morphGridBefore);
+        morphGrid = new MorphGrid(MorphController.this.morphGridBefore);
 
         stepsX = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
         stepsY = new double[previewMorphGrid.getGridDim()-1][previewMorphGrid.getGridDim()-1];
