@@ -7,8 +7,6 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
-import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -125,28 +123,31 @@ public class MorphController{
     //as the user moves the mouse (drags), redraw the point and the triangles it controls
     private void rubberBandingWithBoundaries(MouseEvent e, MorphGrid morphGrid){
 
-        if (e.getX() > morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() & e.getYOnScreen() > morphGrid.getLocation().getY()) {
-            morphGrid.updateTriangles(morphGrid.getPanelSize(), e.getY());
-        }
-        if (e.getX() > morphGrid.getPanelSize() && e.getY() < 0) {
-            morphGrid.updateTriangles(morphGrid.getPanelSize(), 0);
-        }
-        if (e.getY() > morphGrid.getPanelSize() && e.getX() < morphGrid.getPanelSize() & e.getXOnScreen() > morphGrid.getLocation().getX()) {
-            morphGrid.updateTriangles(e.getX(), morphGrid.getPanelSize());
-        }
-        if (e.getX() > morphGrid.getPanelSize() && e.getY() > morphGrid.getPanelSize()) {
-            morphGrid.updateTriangles(morphGrid.getPanelSize(), morphGrid.getPanelSize());
-        }
-        if (e.getX() < 0 && e.getY() < morphGrid.getPanelSize() & e.getY() > 0) {
-            morphGrid.updateTriangles(0, e.getY());
-        }
-        if (e.getY() < 0 && e.getX() < morphGrid.getPanelSize() & e.getX() > 0) {
-            morphGrid.updateTriangles(e.getX(), 0);
-        }
-        if (e.getX() < 0 && e.getY() < 0) {
-            morphGrid.updateTriangles(0, 0);
-        }
-        if (e.getX() < morphGrid.getPanelSize() && e.getY() < morphGrid.getPanelSize() && e.getX()> 0 && e.getY() > 0 && polygonBound.contains(new Point(e.getX(), e.getY()))){
+//        if (e.getX() > morphGrid.getPanelDim() && e.getY() < morphGrid.getPanelDim() & e.getYOnScreen() > morphGrid.getLocation().getY()) {
+//            morphGrid.updateTriangles(morphGrid.getPanelDim(), e.getY());
+//        }
+//        if (e.getX() > morphGrid.getPanelDim() && e.getY() < 0) {
+//            morphGrid.updateTriangles(morphGrid.getPanelDim(), 0);
+//        }
+//        if (e.getY() > morphGrid.getPanelDim() && e.getX() < morphGrid.getPanelDim() & e.getXOnScreen() > morphGrid.getLocation().getX()) {
+//            morphGrid.updateTriangles(e.getX(), morphGrid.getPanelDim());
+//        }
+//        if (e.getX() > morphGrid.getPanelDim() && e.getY() > morphGrid.getPanelDim()) {
+//            morphGrid.updateTriangles(morphGrid.getPanelDim(), morphGrid.getPanelDim());
+//        }
+//        if (e.getX() < 0 && e.getY() < morphGrid.getPanelDim() & e.getY() > 0) {
+//            morphGrid.updateTriangles(0, e.getY());
+//        }
+//        if (e.getY() < 0 && e.getX() < morphGrid.getPanelDim() & e.getX() > 0) {
+//            morphGrid.updateTriangles(e.getX(), 0);
+//        }
+//        if (e.getX() < 0 && e.getY() < 0) {
+//            morphGrid.updateTriangles(0, 0);
+//        }
+//        if (e.getX() < morphGrid.getPanelDim() && e.getY() < morphGrid.getPanelDim() && e.getX()> 0 && e.getY() > 0 && polygonBound.contains(new Point(e.getX(), e.getY()))){
+//            morphGrid.updateTriangles(e.getX(), e.getY());
+//        }
+        if (polygonBound.contains(new Point(e.getX(), e.getY()))){
             morphGrid.updateTriangles(e.getX(), e.getY());
         }
     }
@@ -346,10 +347,6 @@ public class MorphController{
             public void actionPerformed(ActionEvent e) {
                 morphGridBefore.setUpGrid(gridDim);
                 morphGridAfter.setUpGrid(gridDim);
-//                ColorModel cm = inputImage.getColorModel();
-//                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//                WritableRaster raster = inputImage.copyData(null);
-//                inputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 inputImageMorph = new BufferedImage(inputImage.getWidth(), inputImage.getHeight(), 5);
                 Graphics2D g = inputImageMorph.createGraphics();
                 g.drawImage(inputImage, 0, 0, null);
@@ -360,10 +357,6 @@ public class MorphController{
                 g = outputImageMorph.createGraphics();
                 g.drawImage(outputImage, 0, 0, null);
                 g.dispose();
-//                cm = outputImage.getColorModel();
-//                isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//                raster = outputImage.copyData(null);
-//                outputImageMorph = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 morphGridAfter.setImage(outputImageMorph);
             }
         });
@@ -499,27 +492,6 @@ public class MorphController{
         morphView.getFileOpenOutput().addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                int returnVal = morphView.getFc().showOpenDialog(morphView);
-////                if (returnVal == JFileChooser.APPROVE_OPTION) {
-////                    File file = morphView.getFc().getSelectedFile();
-////                    try {
-////                        outputImage = ImageIO.read(file);
-////                        outputImageMorph = ImageIO.read(file);
-////                        tweenImageOutput = ImageIO.read(file);
-////                        if(outputImage.getHeight()-morphGridAfter.getPanelDim()!=0 || outputImage.getWidth()-morphGridAfter.getPanelDim()!=0){
-////                            Image tmp = outputImage.getScaledInstance(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), Image.SCALE_SMOOTH);
-////                            outputImage = new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
-////                            outputImageMorph =  new BufferedImage(morphGridAfter.getPanelDim(), morphGridAfter.getPanelDim(), 5);
-////                            Graphics2D g2 = outputImage.createGraphics();
-////                            g2.drawImage(tmp, 0, 0, null);
-////                            g2.dispose();
-////                            morphGridAfter.setImage(outputImage);
-////                        }
-////                        morphGridBefore.setOutputImage(outputImageMorph);
-////                        morphGridAfter.setImage(outputImage);
-////                        morphGridAfter.setOutputImage(outputImage);
-////                    } catch (IOException e1){}
-////                }
                 int returnVal = morphView.getFc().showOpenDialog(morphView);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = morphView.getFc().getSelectedFile();
@@ -699,19 +671,10 @@ public class MorphController{
             @Override
             public void actionPerformed(ActionEvent e) {
                 morphFrameCount = 0;
-//                ColorModel cm = inputImageMorph.getColorModel();
-//                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//                WritableRaster raster = inputImageMorph.copyData(null);
-//                tweenImageInput = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
-
                 tweenImageInput = new BufferedImage(inputImageMorph.getWidth(), inputImageMorph.getHeight(), 5);
                 Graphics2D g = tweenImageInput.createGraphics();
                 g.drawImage(inputImageMorph, 0, 0, null);
                 g.dispose();
-//                ColorModel cm2 = outputImageMorph.getColorModel();
-//                boolean isAlphaPremultiplied2 = cm2.isAlphaPremultiplied();
-//                WritableRaster raster2 = outputImageMorph.copyData(null);
-//                tweenImageOutput = new BufferedImage(cm2, raster2, isAlphaPremultiplied2, null);
                 tweenImageOutput = new BufferedImage(outputImageMorph.getWidth(), outputImageMorph.getHeight(), 5);
                 g = tweenImageOutput.createGraphics();
                 g.drawImage(outputImageMorph, 0, 0, null);

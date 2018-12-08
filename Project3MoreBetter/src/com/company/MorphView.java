@@ -35,7 +35,7 @@ public class MorphView extends JPanel{
         previewMorphButton = new JButton("Preview Morph"); //opens preview window
         resetButton = new JButton("Reset"); //puts control points back to original positions
         morphTimeSlider = new JSlider(1,5,2); //controls duration of morph
-        morphFrameSlider = new JSlider(5, 60, 10); //controls number of tween frames
+        morphFrameSlider = new JSlider(5, 30, 10); //controls number of tween frames
         morphTimeLabel = new JLabel("Morph Duration: "+morphTimeSlider.getValue()+" seconds");
         morphFrameLabel = new JLabel("Number of Tween Frames: "+morphFrameSlider.getValue());
         morphButton = new JButton("Morph");

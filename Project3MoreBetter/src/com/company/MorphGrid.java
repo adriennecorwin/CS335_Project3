@@ -150,11 +150,6 @@ public class MorphGrid extends JPanel {
         this.panelSize = toCopy.panelSize;
         this.spacing = toCopy.spacing;
         this.outputImage = null;
-        //http://www.javased.com/?post=3514158
-//        ColorModel cm = toCopy.image.getColorModel();
-//        boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-//        WritableRaster raster = toCopy.image.copyData(null);
-//        this.image = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
         this.image = new BufferedImage(toCopy.image.getWidth(), toCopy.getImage().getHeight(), 5);
         Graphics2D g = image.createGraphics();
         g.drawImage(toCopy.image, 0, 0, null);
@@ -217,14 +212,10 @@ public class MorphGrid extends JPanel {
 
         if(isMorphGrid) {
             if (isMorphing) {
-//                ColorModel cm = image.getColorModel();
-////                boolean isAlphaPremultiplied = cm.isAlphaPremultiplied();
-////                WritableRaster raster = image.copyData(null);
                 BufferedImage compositeTween = new BufferedImage(image.getWidth(), image.getHeight(), 5);
                 g = compositeTween.createGraphics();
                 g.drawImage(image, 0, 0, null);
                 g.dispose();
-//                BufferedImage compositeTween = new BufferedImage(cm, raster, isAlphaPremultiplied, null);
                 Graphics2D saveMorph = compositeTween.createGraphics();
                 if (outputImage != null) {
                     if (alpha <= 1) {
@@ -365,21 +356,12 @@ public class MorphGrid extends JPanel {
         return gridDim;
     }
 
-    public void setGridDim(int gridDim){
-        this.gridDim = gridDim+1;
-    }
-
-
     public ControlPoint[][] getControlPoints(){
         return controlPoints;
     }
 
     public Triangle[][][] getTriangles(){
         return triangles;
-    }
-
-    public int getPanelSize(){
-        return panelSize;
     }
 
     public void setImage(BufferedImage image){
